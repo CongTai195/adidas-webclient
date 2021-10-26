@@ -13,6 +13,7 @@ class App extends React.Component{
         <div className="app">
           <Router>
             <Header />
+            <div></div>
             <Section />
           </Router>
         </div>

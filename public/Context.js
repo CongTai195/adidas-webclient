@@ -21,7 +21,7 @@ export class DataProvider extends Component {
             {
                 "_id": "2",
                 "title": "Shoes 02",
-                "src": "/giay_nam_2.png",
+                "src": "/giay_nam_02.png",
                 "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
                 "Content": "Khong biet ghi gi trong nay het a",
                 "price": 2700,

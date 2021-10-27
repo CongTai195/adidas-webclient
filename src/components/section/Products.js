@@ -17,7 +17,7 @@ export class Products extends Component {
                     products.map(product => (
                         <div className="card" key={product._id}>
                             <Link to={`/product/${product._id}`}>
-                                <img src={product.src} alt=""/>
+                                <img src={process.env.PUBLIC_URL + product.src} />
                                 
                             </Link>
                             <div>
@@ -26,7 +26,7 @@ export class Products extends Component {
                                 </h3>
                                 <span>${product.price}</span>
                                 {/* <p>{product.Description}</p> */}
-                                <button>Add to card</button>
+                                <button>Thêm vào giỏ</button>
 
                             </div>
                         </div>

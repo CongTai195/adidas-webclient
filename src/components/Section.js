@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Products from './section/Products';
 import Details from './section/Details';
 import {Route} from "react-router-dom"
-import LoginForm from './LoginForm';
 
 
 export class Section extends Component {

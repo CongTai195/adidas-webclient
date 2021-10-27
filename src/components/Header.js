@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Iconuser from './svg/user-regular.svg'
-import Yourcart from './img/shopping-cart (1).png'
+// import Yourcart from './img/shopping-cart (1).png'
+
 
 
 import { Link } from "react-router-dom";
@@ -17,7 +18,7 @@ export class Header extends Component {
                                 <li><Link to="/checkorder">Tra cứu đơn hàng</Link></li>
                                 <li>
                                     <div className="icon-cart">
-                                        {/* <img src={Yourcart} alt="" width="15"/> */}
+                                        
                                         <Link to="/cart">Giỏ hàng</Link>
                                         <span>(0)</span>
                                     </div>
@@ -38,6 +39,7 @@ export class Header extends Component {
                                 <ul className="nav navbar">
                                     <li>
                                         <Link to="/product">NAM</Link>
+                                        {/* <img src={process.env.PUBLIC_URL + '/giay_nam_01.png'} alt=""/> */}
                                     </li>
                                     <li>
                                         <Link to="/">NỮ</Link>

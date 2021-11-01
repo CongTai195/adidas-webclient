@@ -12,7 +12,6 @@ export class Products extends Component {
         const {products} = this.context
         return(
             <div id="product">
-                
                 {
                     products.map(product => (
                         <div className="card" key={product._id}>

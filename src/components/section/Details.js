@@ -1,7 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { DataContext } from '../Context';
 import { Link } from 'react-router-dom';
+import Sizepick from './Sizepick'
 import '../css/Details.css'
+
+function chech_click_drop() {
+    const [selected, setSelected] = useState("")
+}
 
 export class Details extends Component {
     static contextType = DataContext;
@@ -24,8 +29,11 @@ export class Details extends Component {
         this.getProduct()
     }
 
+    
+
     render() {
         const {product} = this.state;
+        
         return(
             <>
                 {
@@ -39,6 +47,11 @@ export class Details extends Component {
                                 </div>
                                 <p>{product.Description}</p>
                                 <p>{product.Content}</p>
+                                <p>{
+                                    product.count
+                                }</p>
+                                <p>Size</p>
+                                <Sizepick size={product.size} />
                                 <Link to="/cart" className="cart">
                                     Thêm vào giỏ
                                 </Link>

@@ -26,3 +26,32 @@
     text-transform: uppercase;
     letter-spacing: 2px;
 }
+.box .dropdown{
+    width: 200px;
+    margin: 1px;
+}
+.box .dropdown .dropdown-btn{
+    padding: 8px;
+    height: 30px;
+    background: rgb(204, 198, 198);
+    box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
+}
+.box .dropdown .dropdown-content button{
+    width: 30px;
+    height: 30px;
+    border: 1px solid #333;
+    outline: none;
+    cursor:pointer;
+}
+.box p{
+    line-height: 1.5;
+    margin: 10px 0;
+}
+.box .cart{
+    background: #333;
+    color: white;
+    text-decoration: none;
+    padding: 10px 25px;
+    display: inline-block;
+    margin-top: 5px;
+}

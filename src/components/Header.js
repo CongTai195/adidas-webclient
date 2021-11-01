@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import Iconuser from './svg/user-regular.svg'
 // import Yourcart from './img/shopping-cart (1).png'
-
-
-
 import { Link } from "react-router-dom";
 import './css/Header.css'
 
@@ -24,14 +21,14 @@ export class Header extends Component {
                                     </div>
                                 </li>
                                 <li>
-                                    {/* <img src={Iconuser} alt="" width="12"/> */}
+                                    <img src={Iconuser} alt="" width="12"/>
                                     <Link to="/login">Đăng nhập</Link>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                     <div className="navbar-center">
-                        <div className="navbar-header">
+                        <div className="navbar-header-logo">
                             
                         </div>
                         <div className="collapse-navbar-collapse">
@@ -44,13 +41,13 @@ export class Header extends Component {
                                     <li>
                                         <Link to="/">NỮ</Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <Link to="/">TRẺ EM</Link>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </nav>
                         </div>
-                        <div >
+                        <div className="button-search">
                             <img/>
                             <input type="text" name="key" className="btn-search" placeholder="Tìm kiếm"/>
                         </div>

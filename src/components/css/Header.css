@@ -33,7 +33,7 @@ header .header-menu nav .icon-cart{
 }
 header .header-menu nav .icon-cart span{
     position: absolute;
-    color: aliceblue;
+    color: rgb(230, 111, 14);
     top: -5px;
     right: -5px;
     padding: 0px -5px;
@@ -52,6 +52,10 @@ header .navbar-center{
 /* header .collapse-navbar-collapse nav{
     display: flex;
 } */
+header .navbar-center .navbar-header-logo{
+    display: flex;
+}
+
 header .collapse-navbar-collapse nav ul li{
     list-style: none;
     display: inline-block;

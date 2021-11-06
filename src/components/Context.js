@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export const DataContext = React.createContext();
 
 export class DataProvider extends Component {
-    
+
     state = {
         products: [
             {
@@ -17,7 +17,7 @@ export class DataProvider extends Component {
                 "price": 5000,
                 "colors": ["red", "black", "crimson", "teal"],
                 "count": 10,
-                "size": [21, 22, 23, 24, 25]
+                "size": [1, 2, 3, 4, 21, 22, 23, 24, 25]
 
             },
             {
@@ -266,14 +266,136 @@ export class DataProvider extends Component {
                 "size": [21, 22, 23, 24, 25]
 
             }
-        ]
+        ],
+        cart: [],
+        selectd_quantity: "",
+        selectd_size: "",
+        selectd_color: "",
+        count_cart: 0,
     }
-    
-    render() {
-        const {products} = this.state;
 
-        return(
-            <DataContext.Provider value={{products}}>
+    addCart = (id) => {
+        const { products, cart } = this.state;
+        const selec_size = this.state.selectd_size;
+        const selec_quantity = this.state.selectd_quantity;
+        const count = this.state.count_cart;
+        const check = cart.every(item => {
+            return item._id !== id
+
+        })
+
+
+
+        if (selec_size != "" && selec_quantity != "") {
+            const data1 = products.filter(products => {
+                return products._id === id
+            })
+            //console.log("data1", data1)
+            //const temp = Object.assign(data1)
+            
+            const obj_yourcart = {}
+            for (const [key, value] of Object.entries(data1)){
+                //var temp_obj = {}
+                for (const [key1, value1] of Object.entries(value)){
+                    //console.log("key: ", key1, " value: ", value1)
+                    if(key1 == "size" || key1 == "count"){
+                        if(key1 == "size"){
+                            //console.log("key size ",key1)
+                            obj_yourcart[key1] = selec_size
+                            //console.log("thay doi size: temp_obj",[key1] , "value", value1)
+                        }
+                        else{
+                            obj_yourcart[key1] = selec_quantity
+                            //console.log("thay doi count: temp_obj",[key1] , "value", value1)
+                        }
+                    }
+                    else{
+                        obj_yourcart[key1] = value1
+                    }
+                }
+                //console.log("temp ",temp_obj)
+                //obj_yourcart[key] = temp_obj
+            }
+            //console.log("obj_yourcart: ",obj_yourcart)
+            //var select_size = {"select_Size": selec_size}
+
+            //const temp = Object.assign(products[id-1])
+            
+            //temp[0].size = selec_size
+
+
+            //this.setState({cart: [...obj_yourcart]})
+            this.setState(i => ({
+                cart: [...i.cart, obj_yourcart]
+            }))
+
+            //this.setState({count_cart: count+1})
+            //console.log("Cart: ", cart[count])
+            //this.setState({ cart: [...cart, ...obj_yourcart] })
+
+            // this.setState(i => ({
+            //     cart: [...i.cart, temp]
+            // }))
+
+
+
+
+
+
+            //this.setState(cart.push(temp))
+
+            //this.setState({cart: [...data,]})
+            //console.log(cart)
+            //this.addSize("")
+
+        } else {
+            alert("Vui lòng chọn đầy đủ Size và Số lượng!")
+        }
+        // if(check){
+        //     const data = products.filter(products =>{
+        //         return products._id === id
+        //     })
+        //     this.setState({cart: [...cart, ...data]})
+
+
+        //     console.log(data)
+        // }else{
+        //     alert("Đã có trong giỏ hàng!")
+        // }
+
+    };
+    addSize = (size) => {
+        //cho bien selectd_size trong state
+        const sizee = this.state.selectd_size;
+        this.setState({ selectd_size: size })
+    };
+    addQuantity = (quantity) => {
+        
+        this.setState({ selectd_quantity: quantity })
+        
+    }
+    removeProduct = (id) => {
+        if (window.confirm("Bạn có chắc là xóa sản phẩm này ra khỏi giỏ hàng không.")) {
+            const { cart } = this.state;
+            cart.forEach((item, index) => {
+                if (item._id === id) {
+                    cart.splice(index, 1)
+                }
+            })
+            this.setState({ cart: cart })
+        }
+    };
+
+
+
+    render() {
+        const { products, cart, selectd_quantity, selectd_size, selectd_color, count_cart } = this.state;
+        const { addCart, addSize, addQuantity, removeProduct } = this;
+        // const {check_selectsize} = this;
+        console.log(products)
+        console.log("Cart: ",cart)
+        return (
+            <DataContext.Provider value={{ products, cart, selectd_size, addCart, addSize, addQuantity, removeProduct }}>
                 {this.props.children}
             </DataContext.Provider>
         )

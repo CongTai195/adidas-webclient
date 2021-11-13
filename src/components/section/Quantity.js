@@ -2,9 +2,9 @@ import React, { useContext, useState } from 'react'
 import { DataContext } from '../Context';
 
 function Quantity(props) {
-    const context = useContext(DataContext)
-
-    const count = Array.from({length: props.count}, (_, i) => i+1)
+    //const context = useContext(DataContext)
+    
+    const count = Array.from({length: props.quantity}, (_, i) => i+1)
 
     const [isActive, setIsActive] = useState(false);
     const [choose_quantity, setQuantity] = useState("");
@@ -23,7 +23,8 @@ function Quantity(props) {
                                 onClick={(e) => {
                                     setIsActive(false);
                                     setQuantity(item);
-                                    context.addQuantity(item);
+                                    props.quantityCallback(item)
+                                    //context.addQuantity(item);
                                 }} key={item}>{item}</button>
                         ))
                     }

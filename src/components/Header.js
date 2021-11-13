@@ -5,20 +5,85 @@ import Logo from './img/bieu-tuong-adidas.jpg'
 import { Link } from "react-router-dom";
 import { DataContext } from './Context'
 import './css/Header.css'
+import axios from 'axios';
 
 export class Header extends Component {
     static contextType = DataContext;
 
     state = {
-        toggle: false
+        toggle: false,
+        categorys: [],
+        category_adi: [],
+        category_adi_neo: [],
+        category_adi_football: [],
+        category_adi_basketball: [],
     }
+    componentDidMount() {
+        //http://127.0.0.1:8000/api/category/10/product
+        //const category = []
+        axios.get('http://127.0.0.1:8000/api/category')
+            .then(res => {
+                //console.log("Data: ", res.length)
+                //category = res.data.results
+                this.setState({
+                    categorys: res.data.results
+                });
+                for (const [key, value] of Object.entries(res.data.results)) {
+                    for (const [key1, value1] of Object.entries(value)) {
+                        if (key1 == "subs") {
+                            for (const [key2, value2] of Object.entries(value1)) {
+                                // console.log("here: ", value2.id)
+                                if (value2.type == 1) {
+                                    this.setState(i => ({
+                                        category_adi: [...i.category_adi, value2]
+                                    }))
+                                }
+                                else if (value2.type == 2) {
+                                    this.setState(i => ({
+                                        category_adi_neo: [...i.category_adi_neo, value2]
+                                    }))
+                                }
+                                else if (value2.type == 3) {
+                                    this.setState(i => ({
+                                        category_adi_football: [...i.category_adi_football, value2]
+                                    }))
+                                }
+                                else {
+                                    this.setState(i => ({
+                                        category_adi_basketball: [...i.category_adi_basketball, value2]
+                                    }))
+                                }
+                            }
 
+                        }
+                    }
+                }
+
+            }).catch(err => {
+                console.log("Err: ", err)
+            });
+
+
+    };
+    // getSubsCategory = (category) => {
+    //     for (const [key, value] of Object.entries(category)) {
+    //         for (const [key1, value1] of Object.entries(value)) {
+    //             if (key1 == "subs") {
+    //                 this.setState(i => ({
+    //                     subsCategory: [...i.subsCategory, value1]
+    //                 }))
+    //             }
+    //         }
+    //     }
+    // }
     render() {
-        const { toggle } = this.state;
+        const { toggle, categorys, category_adi, category_adi_neo, category_adi_football, category_adi_basketball } = this.state;
         const { cart } = this.context;
+        const user = this.context.user;
+
         return (
             <header>
-                <div className="header container">
+                <div className="header-container">
                     <div className="header-menu">
                         <nav>
                             <ul className="menu">
@@ -32,7 +97,7 @@ export class Header extends Component {
                                 </li>
                                 <li>
                                     <img src={Iconuser} alt="" width="12" />
-                                    <Link to="/login">Đăng nhập</Link>
+                                    <Link to="/login">{user.length === 0 ? "ĐĂNG NHẬP" : user.name}</Link>
                                 </li>
                             </ul>
                         </nav>
@@ -41,21 +106,78 @@ export class Header extends Component {
                         <div className="navbar-header-logo">
                             <img src={Logo} alt="" width="100" />
                         </div>
+                        {/* -------------------------------------------- */}
                         <div className="collapse-navbar-collapse">
-                            <nav>
-                                <ul className="nav navbar">
-                                    <li>
-                                        <Link to="/product">NAM</Link>
-                                        {/* <img src={process.env.PUBLIC_URL + '/giay_nam_01.png'} alt=""/> */}
-                                    </li>
-                                    <li>
-                                        <Link to="/">NỮ</Link>
-                                    </li>
-                                    {/* <li>
-                                        <Link to="/">TRẺ EM</Link>
-                                    </li> */}
-                                </ul>
-                            </nav>
+                            <ul className="nav-navbar">
+                                <li key="1" className="product-category">
+                                    {/* <Link to={`/category/${1}`}>Adidas</Link> */}
+                                    <a>Adidas</a>
+                                    <div className="subs-cate-adidas">
+                                        {/* <Categoryadidas category_adi={category_adi}></Categoryadidas> */}
+                                        <ul className="row-category-adidas">
+                                            {
+                                                category_adi.map(subs => (
+                                                    <li key={subs.id} className="chil-row-adidas">
+                                                        <Link to={`/category/${subs.id}`}>{subs.name}</Link>
+                                                    </li>
+                                                ))
+
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li key="2" className="product-category">
+                                    {/* <Link to={`/category/${2}`}>Adidas neo</Link> */}
+                                    <a>Adidas neo</a>
+                                    <div className="subs-cate-adidas">
+                                        <ul className="row-category-adidas">
+                                            {
+                                                category_adi_neo.map(subs => (
+
+                                                    <li key={subs.id} className="chil-row-adidas">
+                                                        <Link to={"/category/" + subs.id}>{subs.name}</Link>
+                                                    </li>
+                                                ))
+
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li key="3" className="product-category">
+                                    {/* <Link to={`/category/${3}`}>Adidas bóng đá</Link> */}
+                                    <a>Adidas bóng đá</a>
+                                    <div className="subs-cate-adidas">
+                                        <ul className="row-category-adidas">
+                                            {
+                                                category_adi_football.map(subs => (
+
+                                                    <li key={subs.id} className="chil-row-adidas">
+                                                        <Link to={"/category/" + subs.id}>{subs.name}</Link>
+                                                    </li>
+                                                ))
+
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li key="4" className="product-category">
+                                    {/* <Link to={`/category/${4}`}>Adidas bóng rổ</Link> */}
+                                    <a>Adidas bóng rổ</a>
+                                    <div className="subs-cate-adidas">
+                                        <ul className="row-category-adidas">
+                                            {
+                                                category_adi_basketball.map(subs => (
+
+                                                    <li key={subs.id} className="chil-row-adidas">
+                                                        <Link to={"/category/" + subs.id}>{subs.name}</Link>
+                                                    </li>
+                                                ))
+
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                         <div className="button-search">
                             <img />
@@ -67,5 +189,6 @@ export class Header extends Component {
         )
     }
 }
+
 
 export default Header

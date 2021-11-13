@@ -49,17 +49,29 @@
 
 
 import React, { useContext, useState } from 'react';
-import { DataContext } from '../Context';
+//import { DataContext } from '../Context';
 
 function Sizepick(props) {
 
     //const selectd_size = useContext(DataContext)
-    const context = useContext(DataContext)
+    //const context = useContext(DataContext)
 
     const list_size = props.size;
+    const sizeCallback = props.sizeCallback;
     //const id_product = props.id;
+    //console.log("typeof: ", typeof (sizeCallback))
     const [isActive, setIsActive] = useState(false);
     const [choose_size, setSize] = useState("");
+
+    //const setcallback = sizeCallback()
+
+    // const setcallback = useState({
+    //     if(sizeCallback) {
+    //         console.log("sizepick selected size 2: ", size)
+    //         sizeCallback(choose_size)
+
+    //     }
+    // })
 
     return (
         <div className="size-dropdown">
@@ -74,7 +86,7 @@ function Sizepick(props) {
                                 onClick={(e) => {
                                     setIsActive(false);
                                     setSize(item);
-                                    context.addSize(item)
+                                    props.sizeCallback(item)
                                 }} key={item}>{item}</button>
 
                         ))

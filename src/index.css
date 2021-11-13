@@ -23,5 +23,7 @@ code {
 section{
   box-shadow: 0 0 5px #ccc;
   padding: 15px 10px;
-  background-color: rgb(233, 227, 227);
+  /* background-color: rgb(233, 227, 227); */
+  background-color: white;
+
 }

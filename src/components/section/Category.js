@@ -12,16 +12,19 @@ export class Category extends Component {
         products: [],
     }
 
-    componentDidMount() {
-        //this.querydb();
-        this.getproduct()
-    }
-    getproduct = () => {
-        if (this.props.match.params.id){
+    // componentDidMount() {
+    //     //this.querydb();
+    //     //this.getproduct()
+    // }
+    // getproduct = () => {
+    //     if (this.props.match.params.id){
+    //         this.context.resultProductCategory(this.props.match.params.id)
+
+    //         // const temp = this.context.category_product;
+    //         // this.setState({products: temp})
             
-            this.context.resultProductCategory(this.props.match.params.id)
-        }
-    }
+    //     }
+    // }
     querydb = () => {
         //http://127.0.0.1:8000/api/category/10/product
         //http://127.0.0.1:8000/api/product
@@ -44,8 +47,9 @@ export class Category extends Component {
     }
 
     render() {
+        
         //this.setState({products: []})
-        //const { products } = this.state
+        // const { products } = this.state
         const products = this.context.category_product;
         return (
             <div className="category-products d-flex container" >

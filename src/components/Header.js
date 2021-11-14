@@ -65,20 +65,9 @@ export class Header extends Component {
 
 
     };
-    // getSubsCategory = (category) => {
-    //     for (const [key, value] of Object.entries(category)) {
-    //         for (const [key1, value1] of Object.entries(value)) {
-    //             if (key1 == "subs") {
-    //                 this.setState(i => ({
-    //                     subsCategory: [...i.subsCategory, value1]
-    //                 }))
-    //             }
-    //         }
-    //     }
-    // }
     render() {
         const { toggle, categorys, category_adi, category_adi_neo, category_adi_football, category_adi_basketball } = this.state;
-        const { cart } = this.context;
+        const { cart, resultProductCategory } = this.context;
         const user = this.context.user;
 
         return (
@@ -102,12 +91,12 @@ export class Header extends Component {
                             </ul>
                         </nav>
                     </div>
-                    <div className="navbar-center">
+                    <div className="navbar-center" >
                         <div className="navbar-header-logo">
                             <img src={Logo} alt="" width="100" />
                         </div>
                         {/* -------------------------------------------- */}
-                        <div className="collapse-navbar-collapse">
+                        <div className="collapse-navbar-collapse" >
                             <ul className="nav-navbar">
                                 <li key="1" className="product-category">
                                     {/* <Link to={`/category/${1}`}>Adidas</Link> */}
@@ -117,7 +106,7 @@ export class Header extends Component {
                                         <ul className="row-category-adidas">
                                             {
                                                 category_adi.map(subs => (
-                                                    <li key={subs.id} className="chil-row-adidas">
+                                                    <li key={subs.id} className="chil-row-adidas" onClick={() => resultProductCategory(subs.id)}>
                                                         <Link to={`/category/${subs.id}`}>{subs.name}</Link>
                                                     </li>
                                                 ))
@@ -134,7 +123,7 @@ export class Header extends Component {
                                             {
                                                 category_adi_neo.map(subs => (
 
-                                                    <li key={subs.id} className="chil-row-adidas">
+                                                    <li key={subs.id} className="chil-row-adidas" onClick={() => resultProductCategory(subs.id)}>
                                                         <Link to={"/category/" + subs.id}>{subs.name}</Link>
                                                     </li>
                                                 ))
@@ -151,7 +140,7 @@ export class Header extends Component {
                                             {
                                                 category_adi_football.map(subs => (
 
-                                                    <li key={subs.id} className="chil-row-adidas">
+                                                    <li key={subs.id} className="chil-row-adidas" onClick={() => resultProductCategory(subs.id)}>
                                                         <Link to={"/category/" + subs.id}>{subs.name}</Link>
                                                     </li>
                                                 ))
@@ -168,7 +157,7 @@ export class Header extends Component {
                                             {
                                                 category_adi_basketball.map(subs => (
 
-                                                    <li key={subs.id} className="chil-row-adidas">
+                                                    <li key={subs.id} className="chil-row-adidas" onClick={() => resultProductCategory(subs.id)}>
                                                         <Link to={"/category/" + subs.id}>{subs.name}</Link>
                                                     </li>
                                                 ))

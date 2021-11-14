@@ -13,7 +13,7 @@ export class Cart extends Component {
     }
 
     render() {
-        const { cart, removeProduct, total } = this.context;
+        const { cart, removeProductinCart, total } = this.context;
         if (cart.length === 0) {
             return <h2 style={{ textAlign: "center" }}>Giỏ hàng</h2>
         }
@@ -40,7 +40,7 @@ export class Cart extends Component {
                                                 <p>SỐ LƯỢNG: {product.quantity}</p>
                                             </div>
                                         </div>
-                                        <div className="delete" onClick={() => removeProduct(product.id)}>X</div>
+                                        <div className="delete" onClick={() => removeProductinCart(product.id)}>X</div>
                                     </div>
                                 ))
                             }

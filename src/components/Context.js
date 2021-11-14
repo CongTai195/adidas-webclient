@@ -456,7 +456,7 @@ export class DataProvider extends Component {
         this.setState({ selectd_quantity: quantity })
 
     }
-    removeProduct = (id) => {
+    removeProductinCart = (id) => {
         if (window.confirm("Bạn có chắc là xóa sản phẩm này ra khỏi giỏ hàng không.")) {
             const { cart } = this.state;
             cart.forEach((item, index) => {
@@ -486,17 +486,16 @@ export class DataProvider extends Component {
 
     render() {
         const { products, cart, selectd_quantity, selectd_size, selectd_color, total, category_product, user } = this.state;
-        const { addProductsforCate, addCart, addSize, addQuantity, removeProduct, getTotal, resultProductCategory, addUser } = this;
+        const { addProductsforCate, addCart, addSize, addQuantity, removeProductinCart, getTotal, resultProductCategory, addUser } = this;
         // const {check_selectsize} = this;
         //console.log("Product: ", products)
         // add_detail_product();
         //console.log("file context: user ", user)
-        //console.log("Context category here: ", category_product)
         return (
             //</DataContext.Provider><DataContext.Provider value={{ state: this.state }}>
             <DataContext.Provider value={{
                 products, cart, selectd_quantity, selectd_size, total, category_product, user,
-                addProductsforCate, addCart, addSize, addQuantity, removeProduct, getTotal, resultProductCategory, addUser
+                addProductsforCate, addCart, addSize, addQuantity, removeProductinCart, getTotal, resultProductCategory, addUser
             }}>
                 {this.props.children}
             </DataContext.Provider>

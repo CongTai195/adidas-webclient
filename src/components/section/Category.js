@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { DataContext } from '../Context'
 import axios from 'axios';
 import '../css/Category.css'
-import '../css/bootstrap.css'
+import IconCateCart from '../img/category-cart.png'
+// import '../css/bootstrap.css'
 
 
 export class Category extends Component {
@@ -22,7 +23,7 @@ export class Category extends Component {
 
     //         // const temp = this.context.category_product;
     //         // this.setState({products: temp})
-            
+
     //     }
     // }
     querydb = () => {
@@ -47,30 +48,60 @@ export class Category extends Component {
     }
 
     render() {
-        
+
         //this.setState({products: []})
         // const { products } = this.state
         const products = this.context.category_product;
+        const cart = this.context.cart;
         return (
-            <div className="category-products d-flex container" >
-                {
-                    products.map(product => (
-                        <div className="card-product col-3 p-4 " key={product.id}>
-                            <Link to={`/product/${product.id}`}>
-                                <img className="img-product" src={product.image} />
-                            </Link>
-                            <div className="content">
-                                <Link to={`/product/${product.id}`}>{product.name}</Link>
-                                <br></br>
-                                <span>{(product.price).toLocaleString('vi-VN')} VNĐ</span>
-                                {/* <p>{product.description}</p> */}
-                                {/* <button onClick={() => this.context.addCart(product._id)}>Thêm vào giỏ</button> */}
+            <div className="category-container">
+                <div className="category-products" >
+                    {
+                        products.map(product => (
+                            <div className="category-products-cart" key={product.id}>
+                                <Link to={`/product/${product.id}`}>
+                                    <img className="category-products-cart-img" src={product.image} />
+                                </Link>
+                                <div className="category-products-content">
+                                    <h3 className="category-products-content-name">
+                                        <Link to={`/product/${product.id}`}>{product.name}</Link>
+                                    </h3>
+                                    <span>{(product.price).toLocaleString('vi-VN')} VNĐ</span>
+                                    {/* <p>{product.description}</p> */}
+                                    {/* <button onClick={() => this.context.addCart(product._id)}>Thêm vào giỏ</button> */}
 
+                                </div>
                             </div>
-                        </div>
-                    ))
-                }
+                        ))
+                    }
+                </div>
+                <div className="category-yourcart">
+                    <span className="category-yourcart-count">{cart.length}</span>
+                    <img src={IconCateCart} alt="" width="40" />
+                    <div className="category-yourcart-showproducts">
+
+                    </div>
+                </div>
             </div>
+            // <div className="category-products d-flex container" >
+            //     {
+            //         products.map(product => (
+            //             <div className="card-product col-3 p-4 " key={product.id}>
+            //                 <Link to={`/product/${product.id}`}>
+            //                     <img className="img-product" src={product.image} />
+            //                 </Link>
+            //                 <div className="content">
+            //                     <Link to={`/product/${product.id}`}>{product.name}</Link>
+            //                     <br></br>
+            //                     <span>{(product.price).toLocaleString('vi-VN')} VNĐ</span>
+            //                     {/* <p>{product.description}</p> */}
+            //                     {/* <button onClick={() => this.context.addCart(product._id)}>Thêm vào giỏ</button> */}
+
+            //                 </div>
+            //             </div>
+            //         ))
+            //     }
+            // </div>
         )
     }
 }

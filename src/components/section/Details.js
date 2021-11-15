@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Sizepick from './Sizepick'
 import Colors from './Colors';
 import Quantity from './Quantity';
+import IconCateCart from '../img/category-cart.png'
 import '../css/Details.css'
 
 
@@ -82,6 +83,7 @@ export class Details extends Component {
     // }
     render() {
         const { product } = this.state;
+        const cart = this.context.cart;
         //this.getQuantity()
         //console.log("detail: ", this.state.product)
         //console.log("quantity after seleted size: ", this.state.quantity_afchoo_size)
@@ -122,6 +124,13 @@ export class Details extends Component {
                         </div>
                     ))
                 }
+                <div className="category-yourcart">
+                    <span className="category-yourcart-count">{cart.length}</span>
+                    <img src={IconCateCart} alt="" width="40" />
+                    <div className="category-yourcart-showproducts">
+
+                    </div>
+                </div>
             </>
         )
     }

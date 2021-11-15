@@ -45,7 +45,7 @@ input[type = "text"]{
 }
 .payment .your-order .row .row-2{
     display: flex;
-    width: 480px;
+    width: 420px;
     background: #dadada;
     flex-wrap: wrap;
     padding: 5px 25px 10px 25px;

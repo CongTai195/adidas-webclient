@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { DataContext } from '../Context'
 import '../css/Payment.css'
+import axios from 'axios';
 
 export class Payment extends Component {
     static contextType = DataContext;
@@ -11,10 +12,9 @@ export class Payment extends Component {
         user_address: "",
         user_phone: "",
         payment: "",
-        shipping: "",
+        shipping: "Giao hàng nhanh",
 
     }
-
     componentDidMount() {
 
     }
@@ -30,14 +30,84 @@ export class Payment extends Component {
     setAddress = (address) => {
         this.setState({ user_address: address })
     }
-    payment_product = () => {
+    setPayment = (payment) => {
+        this.setState({ payment: payment })
+    }
+    setShipping = (shipping) => {
+        this.setState({ shipping: shipping })
+    }
+    add_Transaction() {
+        const cart = this.context.cart
+        // 
+        var user_name = this.state.user_name
+        var user_email = this.state.user_email
+        var user_address = this.state.user_address
+        var user_phone = this.state.user_phone
+        var amount = this.context.total
+        var payment = this.state.payment
+        var shipping = this.state.shipping
+        var products = []
+        // 
+        for (const [key, val] of Object.entries(cart)) {
+            const temp = {}
+            //console.log("aaa", val)
+            for (const [key1, val1] of Object.entries(val)) {
+                if (key1 == "id" || key1 == "quantity" || key1 == "size") {
+                    temp[key1] = val1
+                }
+            }
+            products.push(temp)
+        }
 
+        const data = { user_name, user_email, user_address, user_phone, amount, payment, shipping, products }
+        return data
+    }
+    post_transaction = () => {
+        const data = this.add_Transaction()
+        const user = this.context.user
+        console.log("data: ", data)
+        if(user.length == 0){
+            axios.post('/transaction', data)
+            .then(res => {
+                if (res.data.status == "OK") {
+                    this.context.resetCart(res.data.status)
+                    console.log("post_transaction THANH CONG")
+                }
+                //console.log("login:", res.data.results.info)
+            })
+            .catch(err => {
+
+                console.log("post_transaction THAT BAI")
+            });
+        }
+        else{
+            //Bearer như là cấp quyền truy cập cho người mang mã thông báo này
+            const authAxios = axios.create({
+                baseURL: "http://127.0.0.1:8000/api/",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+
+            });
+            authAxios.post('/transaction', data)
+            .then(res => {
+                if (res.data.status == "OK") {
+                    this.context.resetCart(res.data.status)
+                    console.log("post_transaction THANH CONG")
+                }
+                //console.log("login:", res.data.results.info)
+            })
+            .catch(err => {
+
+                console.log("post_transaction THAT BAI")
+            });
+        }
     }
 
     render() {
         const { cart, total, user } = this.context;
         //const total = this.context.total;
-        //console.log("cart in payment: ", cart)
+        // console.log("cart in payment: ", cart)
         if (user.length === 0) {
             return (
                 <div className="payment">
@@ -55,17 +125,25 @@ export class Payment extends Component {
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
-                            <input type="radio" className="dbt" value="dbt" /> Giao hàng nhanh
+                            <input type="radio" id="shipping-payment" value="Giao hàng nhanh" checked="checked"
+                                onChange={(e) => this.setShipping(e.target.value)}
+                            /> Giao hàng nhanh
                         </div>
                         <h2>PHƯƠNG THỨC THANH TOÁN</h2>
                         <div className="row-radio-tt">
-                            <input type="radio" className="dbt" value="dbt" /> Thanh toán trực tiếp khi giao hàng
+                            <input type="radio" name="gender" id="payment-direct" value="Thanh toán trực tiếp khi giao hàng"
+                                onChange={(e) => this.setPayment(e.target.value)}
+                            /> Thanh toán trực tiếp khi giao hàng
                         </div>
-                        <div className="row-radio">
-                            <input type="radio" className="dbt" value="dbt" /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
+                        <div className="row-radio-tt">
+                            <input type="radio" name="gender" id="payment-mastercart" value="Thanh toán bằng thẻ quốc tế và nội địa (ATM)"
+                                onChange={(e) => this.setPayment(e.target.value)}
+                            /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
                         </div>
-                        <div className="row-radio">
-                            <input type="radio" className="dbt" value="dbt" /> Thanh toán bằng ví MoMo
+                        <div className="row-radio-tt">
+                            <input type="radio" name="gender" id="payment-momo" value="Thanh toán bằng ví MoMo"
+                                onChange={(e) => this.setPayment(e.target.value)}
+                            /> Thanh toán bằng ví MoMo
                         </div>
                     </form>
                     <div className="your-order">
@@ -97,7 +175,10 @@ export class Payment extends Component {
                             <p>{total.toLocaleString('vi-VN')} VNĐ</p>
                         </div>
                         <div>
-                            <button type="submit" className="btn btn-primary">HOÀN TẤT ĐẶT HÀNG</button>
+                            <button className="btn-btn-primary"
+                                // this.post_transaction() == true ? restCart : alert("Thanh toán không thành công")
+                                onClick={() => { this.post_transaction() }}
+                            >HOÀN TẤT ĐẶT HÀNG</button>
                         </div>
                     </div>
 
@@ -109,31 +190,43 @@ export class Payment extends Component {
                     <form className="orderForm">
                         <h2>THÔNG TIN GIAO HÀNG</h2>
                         <div className="">
-                            <input type="text" className="form-control" placeholder="HỌ TÊN" value={user.name} />
-                            <input type="text" className="form-control" placeholder="Số điện thoại" value={user.phone} />
-                            <input type="text" className="form-control" placeholder="Email" value={user.email} />
-                            <input type="text" className="form-control" placeholder="Địa chỉ" value={user.address} />
+                            <input type="text" className="form-control" placeholder="HỌ TÊN" value={user.name}
+                                onChange={(e) => this.setName(e.target.value)} />
+                            <input type="text" className="form-control" placeholder="Số điện thoại" value={user.phone}
+                                onChange={(e) => this.setPhone(e.target.value)} />
+                            <input type="text" className="form-control" placeholder="Email" value={user.email}
+                                onChange={(e) => this.setEmail(e.target.value)} />
+                            <input type="text" className="form-control" placeholder="Địa chỉ" value={user.address}
+                                onChange={(e) => this.setAddress(e.target.value)} />
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
-                            <input type="radio" className="dbt" value="dbt" /> Giao hàng nhanh
+                            <input type="radio" className="dbt" value="Giao hàng nhanh" checked="checked" 
+                                onChange={(e) => this.setShipping(e.target.value)}
+                            /> Giao hàng nhanh
                         </div>
                         <h2>PHƯƠNG THỨC THANH TOÁN</h2>
                         <div className="row-radio-tt">
-                            <input type="radio" className="dbt" value="dbt" /> Thanh toán trực tiếp khi giao hàng
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán trực tiếp khi giao hàng" 
+                                onChange={(e) => this.setPayment(e.target.value)}
+                            /> Thanh toán trực tiếp khi giao hàng
                         </div>
-                        <div className="row-radio">
-                            <input type="radio" className="dbt" value="dbt" /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
+                        <div className="row-radio-tt">
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng thẻ quốc tế và nội địa (ATM)" 
+                                onChange={(e) => this.setPayment(e.target.value)}
+                            /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
                         </div>
-                        <div className="row-radio">
-                            <input type="radio" className="dbt" value="dbt" /> Thanh toán bằng ví MoMo
+                        <div className="row-radio-tt">
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng ví MoMo" 
+                                onChange={(e) => this.setPayment(e.target.value)}
+                            /> Thanh toán bằng ví MoMo
                         </div>
                     </form>
                     <div className="your-order">
                         <h2>ĐƠN HÀNG</h2>
                         {
-                            cart.map(item => (
-                                <div className="row">
+                            cart.map((item, index) => (
+                                <div className="row" key={index}>
                                     <div className="row-1">
                                         <p>{item.name}</p>
                                         <p>{(item.price).toLocaleString('vi-VN')} VNĐ</p>
@@ -158,7 +251,10 @@ export class Payment extends Component {
                             <p>{total.toLocaleString('vi-VN')} VNĐ</p>
                         </div>
                         <div>
-                            <button type="submit" className="btn btn-primary">HOÀN TẤT ĐẶT HÀNG</button>
+                            <button className="btn-btn-primary"
+                                // == true ? this.context.restCart : alert("Thanh toán không thành công")
+                                onClick={() => { this.post_transaction() }}
+                            >HOÀN TẤT ĐẶT HÀNG</button>
                         </div>
                     </div>
 

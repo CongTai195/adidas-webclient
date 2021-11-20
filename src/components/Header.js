@@ -4,6 +4,7 @@ import Iconuser from './svg/user-regular.svg'
 import Logo from './img/bieu-tuong-adidas.jpg'
 import { Link } from "react-router-dom";
 import { DataContext } from './Context'
+import List_products from "./section/List_products";
 import './css/Header.css'
 import axios from 'axios';
 
@@ -12,15 +13,32 @@ export class Header extends Component {
 
     state = {
         toggle: false,
+        search: [],
         categorys: [],
         category_adi: [],
         category_adi_neo: [],
         category_adi_football: [],
         category_adi_basketball: [],
     }
+    setSearch = (search) => {
+        // console.log("Here: ", search)
+        const products = this.context.products
+        let matches = []
+        matches = products.filter(state => {
+            const regex = new RegExp(`${search}`, "gi")//gi: khong phan biet chu hoa va thuong
+            return state.name.match(regex) || state.description.match(regex) || state.specifications.match(regex);
+        });
+        // console.log("Here: ", matches)
+        this.setState({search: matches})
+        if(search.length ===0){
+            this.setState({search: []})
+        }
+    }
+    reset_search = () => {
+        this.setState({search: []})
+    }
     componentDidMount() {
         //http://127.0.0.1:8000/api/category/10/product
-        //const category = []
         axios.get('http://127.0.0.1:8000/api/category')
             .then(res => {
                 //console.log("Data: ", res.length)
@@ -65,6 +83,7 @@ export class Header extends Component {
 
 
     };
+
     render() {
         const { toggle, categorys, category_adi, category_adi_neo, category_adi_football, category_adi_basketball } = this.state;
         const { cart, resultProductCategory } = this.context;
@@ -91,7 +110,7 @@ export class Header extends Component {
                             </ul>
                         </nav>
                     </div>
-                    <div className="navbar-center" >
+                    <div className="navbar-center" onClick={() => this.reset_search()} >
                         <div className="navbar-header-logo">
                             <img src={Logo} alt="" width="100" />
                         </div>
@@ -170,7 +189,10 @@ export class Header extends Component {
                         </div>
                         <div className="button-search">
                             <img />
-                            <input type="text" name="key" className="btn-search" placeholder="Tìm kiếm" />
+                            <input type="text" id="btn-header-search" className="btn-search" placeholder="Tìm kiếm"
+                            onChange={(e) => this.setSearch(e.target.value)} 
+                            />
+                            {this.state.search && <List_products search_autocomplete={this.state.search}/>}
                         </div>
                     </div>
                 </div>

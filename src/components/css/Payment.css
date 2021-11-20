@@ -73,7 +73,7 @@ input[type = "text"]{
     border-bottom: 2px solid #645e5e;
     padding: 0px 0px 10px 0px;
 }
-.payment .your-order button{
+.payment .your-order .btn-btn-primary{
     border: none;
     outline: none;
     background: #333;
@@ -85,7 +85,7 @@ input[type = "text"]{
     letter-spacing: 1px;
     margin: 15px 0;
 }
-.payment .your-order button:hover{
+.payment .your-order .btn-btn-primary:hover{
     cursor: pointer;
     background: #494949;
 }

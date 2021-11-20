@@ -11,24 +11,30 @@
 
 /* ----------------------------------------- */
 .label-login{
-    text-decoration: none;
+    display: flex;
+    font-weight: 620;
+    font-size: 25px;
+    justify-content: center;
     margin-bottom: 20px;
 }
-.container-login{
+/* .container-login{
     display: flex;
     width: 100vw;
     height: 100vh;
-}
+} */
 .container-login{
     width: 500px;
     height: 600px;
-    padding: 40px 30px;
+    padding: 40px 60px;
 }
 .form-text .formcontrol{
     width: 100%;
     height: 40px;
     border: 2px solid rgb(44, 42, 42);
     margin-bottom: 25px;
+    font-size: 18px;
+    color: #080808;
+    text-shadow: #51a1a7;
 }
 .btn-login{
     display: inline-block;
@@ -52,10 +58,44 @@
     border: 2px solid #554d4d;
 }
 /* --------------register-------------- */
-
-
+.container .container-register{
+    /* display: flex; */
+    width: 500px;
+    height: 600px;
+    padding: 40px 60px;
+}
+.title-register h2{
+    display: flex;
+    font-weight: 620;
+    font-size: 25px;
+    justify-content: center;
+}
+.title-register .input-box .form-register-control{
+    width: 100%;
+    height: 40px;
+    margin-bottom: 25px;
+    font-size: 18px;
+    color: #080808;
+    text-shadow: #51a1a7;
+    border: 2px solid rgb(44, 42, 42);
+    margin-bottom: 25px;
+}
+.label-text-register{
+    font-weight: 400;
+    font-size: 18px;
+    justify-content: center;
+}
+.input-radio-box .register_radio{
+    margin-left: 10px;
+}
+.input-radio-box {
+    font-size: 18px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
 .btn-register{
     display: inline-block;
+    width: 150px;
     padding: 0.7em 1.7em;
     border: 2px solid #746e6e;
     background-color: #242020;

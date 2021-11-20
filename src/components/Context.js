@@ -328,9 +328,6 @@ export class DataProvider extends Component {
             // ],
             products: [],
             cart: [],
-            selectd_quantity: 0,
-            selectd_size: 0,
-            selectd_color: "",
             total: 0,
             category_product: [],
             user: [],
@@ -338,7 +335,6 @@ export class DataProvider extends Component {
     }
     componentDidMount() {
         this.getAllproducts()
-
 
     };
     getAllproducts = () => {
@@ -386,8 +382,82 @@ export class DataProvider extends Component {
         this.setState({ products: product })
     }
 
+    // -------------------------------Cart----------------------------------------
+    getCartuser = () => {
+
+        const products = this.state.products
+        //if(user != 0){
+        const authAxios = axios.create({
+            baseURL: "http://127.0.0.1:8000/api",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        authAxios.get('/cart')
+            .then(res => {
+                console.log("detail cart: ", res.data.results)
+                const cart_user = res.data.results
+                //Tìm trong list products có id == với prduct_id của cartuser rồi lấy các key tương ứng qua bỏ vào giỏ hàng
+                for (const [key, value] of Object.entries(cart_user)) {
+                    for (const [key1, value1] of Object.entries(value)) {
+                        if (key1 == "product_id") {
+                            //console.log("key1:  ", key1, "  value1:  ", value1)
+                            const data = products.filter(product => {
+                                return product.id == value1
+                            })
+
+                            for (const [key_product, val_product] of Object.entries(data)) {
+                                for (const [key_product1, val_product1] of Object.entries(val_product)) {
+                                    if (key_product1 == "name" || key_product1 == "category_id" ||
+                                        key_product1 == "price" || key_product1 == "description" ||
+                                        key_product1 == "image" || key_product1 == "image_list") {
+
+                                        //console.log("key_prod:  ", key_produc1t, "  val:  ", val_product1)
+                                        value[key_product1] = val_product1
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    console.log("cartuser: ", value)
+                    this.setState(i => ({
+                        cart: [...i.cart, value]
+                    }))
+                }
+
+
+            })
+            .catch(err => {
+                console.log("detail cart THAT BAI")
+            });
+        //}
+    }
+
+    addCartforUser = (data) => {
+        const authAxios = axios.create({
+            baseURL: "http://127.0.0.1:8000/api/",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        console.log("cart data: ", data)
+        authAxios.post('/cart', data)
+            .then(res => {
+                if (res.data.status == "OK") {
+
+                    console.log("post_cart THANH CONG")
+                }
+                //console.log("login:", res.data.results.info)
+            })
+            .catch(err => {
+
+                console.log("post_cart THAT BAI")
+            });
+    }
     addCart = (id, size, quantity) => {
         const { products, cart } = this.state;
+        const user = this.state.user;
         //const selec_size = this.state.selectd_size;
         //const selec_quantity = this.state.selectd_quantity;
 
@@ -424,10 +494,18 @@ export class DataProvider extends Component {
                 }
 
             }
-            console.log("obj_yourcart: ", obj_yourcart)
             this.setState(i => ({
                 cart: [...i.cart, obj_yourcart]
             }))
+            // -----------------------user---------------------------
+            if (user.length != 0) {
+                //console.log("user: ", user)
+                const user_id = user.id
+                const product_id = id
+                const data = { user_id, product_id, quantity, size }
+
+                this.addCartforUser(data)
+            }
 
         } else {
             alert("Vui lòng chọn đầy đủ Size và Số lượng!")
@@ -445,6 +523,67 @@ export class DataProvider extends Component {
         // }
 
     };
+    resetCart = (string) => {
+        if (string == "OK") {
+            //console.log("resetCart file context Okee")
+            this.setState({ cart: [] })
+            this.setState({ total: 0 })
+            //console.log("clear cart: ", this.state.cart)
+            this.getAllproducts()
+        }
+    }
+    delete_cartuser = (data) => {
+
+        const authAxios = axios.create({
+            baseURL: "http://127.0.0.1:8000/api/",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        console.log('cart/' + data)
+        authAxios.delete('cart/' + data)
+            .then(res => {
+                if (res.data.status == "OK") {
+
+                    console.log("delete cart THANH CONG")
+                }
+                //console.log("login:", res.data.results.info)
+            })
+            .catch(err => {
+
+                console.log("delete cart THAT BAI")
+            });
+    }
+
+    removeProductinCart = (id) => {
+        //console.log("removeProductinCart: ", id)
+        const user = this.state.user
+        if (window.confirm("Bạn có chắc là xóa sản phẩm này ra khỏi giỏ hàng không.")) {
+            if (user.length == 0) {
+                const { cart } = this.state;
+                cart.forEach((item, index) => {
+                    if (item.id == id) {
+                        cart.splice(index, 1)
+                    }
+                })
+                this.setState({ cart: cart })
+                this.getTotal()
+            }
+            else {
+                this.delete_cartuser(id)
+                const { cart } = this.state;
+                cart.forEach((item, index) => {
+                    if (item.id == id) {
+                        cart.splice(index, 1)
+                    }
+                })
+                this.setState({ cart: cart })
+                this.getTotal()
+            }
+        }
+    };
+    // -------------------------End Cart--------------------------------------
+
     addSize = (size) => {
         //cho bien selectd_size trong state
         //const sizee = this.state.selectd_size;
@@ -456,18 +595,7 @@ export class DataProvider extends Component {
         this.setState({ selectd_quantity: quantity })
 
     }
-    removeProductinCart = (id) => {
-        if (window.confirm("Bạn có chắc là xóa sản phẩm này ra khỏi giỏ hàng không.")) {
-            const { cart } = this.state;
-            cart.forEach((item, index) => {
-                if (item.id == id) {
-                    cart.splice(index, 1)
-                }
-            })
-            this.setState({ cart: cart })
-            this.getTotal()
-        }
-    };
+
     getTotal = () => {
         const { cart } = this.state;
         const res = cart.reduce((prev, item) => {
@@ -485,17 +613,23 @@ export class DataProvider extends Component {
 
 
     render() {
-        const { products, cart, selectd_quantity, selectd_size, selectd_color, total, category_product, user } = this.state;
-        const { addProductsforCate, addCart, addSize, addQuantity, removeProductinCart, getTotal, resultProductCategory, addUser } = this;
+        const { products, cart, total, category_product, user, } = this.state;
+        const { getAllproducts, addProductsforCate, addCart, resetCart, addSize, addQuantity,
+            removeProductinCart, getTotal, resultProductCategory, addUser, getCartuser,
+            addCartforUser } = this;
         // const {check_selectsize} = this;
-        //console.log("Product: ", products)
+        //console.log("Context Cart: ", cart)
+        // console.log("Context total: ", total)
         // add_detail_product();
-        //console.log("file context: user ", user)
+
+        //console.log("catego ", category_product)
         return (
             //</DataContext.Provider><DataContext.Provider value={{ state: this.state }}>
             <DataContext.Provider value={{
-                products, cart, selectd_quantity, selectd_size, total, category_product, user,
-                addProductsforCate, addCart, addSize, addQuantity, removeProductinCart, getTotal, resultProductCategory, addUser
+                products, cart, total, category_product, user,
+                getAllproducts, addProductsforCate, addCart, addSize, resetCart, addQuantity,
+                removeProductinCart, getTotal, resultProductCategory, addUser, getCartuser,
+                addCartforUser,
             }}>
                 {this.props.children}
             </DataContext.Provider>

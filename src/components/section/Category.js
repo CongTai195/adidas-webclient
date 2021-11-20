@@ -66,7 +66,7 @@ export class Category extends Component {
                                     <h3 className="category-products-content-name">
                                         <Link to={`/product/${product.id}`}>{product.name}</Link>
                                     </h3>
-                                    <span>{(product.price).toLocaleString('vi-VN')} VNĐ</span>
+                                    <span className="category-products-content-price">{(product.price).toLocaleString('vi-VN')} VNĐ</span>
                                     {/* <p>{product.description}</p> */}
                                     {/* <button onClick={() => this.context.addCart(product._id)}>Thêm vào giỏ</button> */}
 

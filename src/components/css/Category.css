@@ -36,12 +36,15 @@
 }
 .category-products-content-name{
     display: block;
-    text-transform: uppercase;
+    font-size: 18px;
     margin: 10px 0;
 }
 .category-products-content-name a{
     text-decoration: none;
     color: rgb(58, 51, 51);
+}
+.category-products-content-price{
+    font-size: 20px;
 }
 .category-products-content-name a:hover{
     color: rgb(0, 0, 0);
@@ -52,11 +55,12 @@
     position: fixed;
     right: 0px;
     top: 250px;
-    width: 50px;
-    height: 85px;
+    width: 40px;
+    height: 75px;
     margin-right: 5px;
     background: rgb(189, 180, 180);
     text-align: center;
+    border: 1px solid rgb(109, 107, 107);
 }
 .category-yourcart-count{
     color:rgb(12, 11, 11);

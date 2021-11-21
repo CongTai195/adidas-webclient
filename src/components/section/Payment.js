@@ -52,7 +52,10 @@ export class Payment extends Component {
             const temp = {}
             //console.log("aaa", val)
             for (const [key1, val1] of Object.entries(val)) {
-                if (key1 == "id" || key1 == "quantity" || key1 == "size") {
+                if(key1 == "product_id"){
+                    temp.id= val1
+                }
+                if (key1 == "quantity" || key1 == "size") {
                     temp[key1] = val1
                 }
             }
@@ -65,13 +68,15 @@ export class Payment extends Component {
     post_transaction = () => {
         const data = this.add_Transaction()
         const user = this.context.user
-        console.log("data: ", data)
+        const cart = this.context.cart
+        console.log("data transaction: ", data)
         if(user.length == 0){
             axios.post('/transaction', data)
             .then(res => {
                 if (res.data.status == "OK") {
                     this.context.resetCart(res.data.status)
                     console.log("post_transaction THANH CONG")
+                    
                 }
                 //console.log("login:", res.data.results.info)
             })
@@ -92,6 +97,9 @@ export class Payment extends Component {
             authAxios.post('/transaction', data)
             .then(res => {
                 if (res.data.status == "OK") {
+                    for (const [key, val] of Object.entries(cart)) {
+                        this.context.delete_cartuser(val.id)
+                    }
                     this.context.resetCart(res.data.status)
                     console.log("post_transaction THANH CONG")
                 }

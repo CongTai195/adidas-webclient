@@ -26,7 +26,7 @@ export class Header extends Component {
         let matches = []
         matches = products.filter(state => {
             const regex = new RegExp(`${search}`, "gi")//gi: khong phan biet chu hoa va thuong
-            return state.name.match(regex) || state.description.match(regex) || state.specifications.match(regex);
+            return state.name.match(regex) ;//|| state.description.match(regex) || state.specifications.match(regex)
         });
         // console.log("Here: ", matches)
         this.setState({search: matches})
@@ -192,7 +192,7 @@ export class Header extends Component {
                             <input type="text" id="btn-header-search" className="btn-search" placeholder="Tìm kiếm"
                             onChange={(e) => this.setSearch(e.target.value)} 
                             />
-                            {this.state.search && <List_products search_autocomplete={this.state.search}/>}
+                            {this.state.search && <List_products search_autocomplete={this.state.search} />}
                         </div>
                     </div>
                 </div>

@@ -38,7 +38,7 @@ export class Details extends Component {
             var len = temp.length;
             var b = temp.search(";")
             if (b == -1) {
-                list_index.push(temp.slice(b+1, len))
+                list_index.push(temp.slice(b + 1, len))
                 break;
             } else {
                 list_index.push(temp.slice(0, b))
@@ -78,7 +78,7 @@ export class Details extends Component {
                         //Lay thong so ki thuat specifications
                         if (key1 == "specifications") {
                             const arr_specification = this.cutUrl(val1)
-                            this.setState({specifications: arr_specification})
+                            this.setState({ specifications: arr_specification })
                         }
                         //lay id category
                         if (key1 == "category_id") {
@@ -166,6 +166,21 @@ export class Details extends Component {
     getSelect_image = (url_image) => {
         this.setState({ select_images: url_image })
     }
+    resetDetail = () => {
+        this.setState({
+            product: [],
+            tem_product: [],
+            category_products: [],
+            specifications: [],
+            category_id: 0,
+            size: [],
+            quantity: [],
+            select_images: "",
+            select_size: 0,
+            select_quantity: 0,
+            quantity_afchoo_size: 0
+        })
+    }
     componentDidMount() {
         this.getProductDetailquerydb()
         //this.getProduct()
@@ -176,7 +191,7 @@ export class Details extends Component {
         const select_images = this.state.select_images
         const specification = this.state.specifications
         const cart = this.context.cart;
-        console.log("specification : ", specification)
+        //console.log("specification : ", specification)
 
         //this.getQuantity()
         //console.log("category_product: ", this.state.category_products)

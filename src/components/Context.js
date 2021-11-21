@@ -505,6 +505,8 @@ export class DataProvider extends Component {
                 const data = { user_id, product_id, quantity, size }
 
                 this.addCartforUser(data)
+                this.resetCart("OK")
+                this.getCartuser()
             }
 
         } else {
@@ -540,7 +542,7 @@ export class DataProvider extends Component {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
         });
-        console.log('cart/' + data)
+        //console.log('cart/' + data)
         authAxios.delete('cart/' + data)
             .then(res => {
                 if (res.data.status == "OK") {
@@ -616,7 +618,7 @@ export class DataProvider extends Component {
         const { products, cart, total, category_product, user, } = this.state;
         const { getAllproducts, addProductsforCate, addCart, resetCart, addSize, addQuantity,
             removeProductinCart, getTotal, resultProductCategory, addUser, getCartuser,
-            addCartforUser } = this;
+            addCartforUser, delete_cartuser } = this;
         // const {check_selectsize} = this;
         //console.log("Context Cart: ", cart)
         // console.log("Context total: ", total)
@@ -629,7 +631,7 @@ export class DataProvider extends Component {
                 products, cart, total, category_product, user,
                 getAllproducts, addProductsforCate, addCart, addSize, resetCart, addQuantity,
                 removeProductinCart, getTotal, resultProductCategory, addUser, getCartuser,
-                addCartforUser,
+                addCartforUser, delete_cartuser,
             }}>
                 {this.props.children}
             </DataContext.Provider>

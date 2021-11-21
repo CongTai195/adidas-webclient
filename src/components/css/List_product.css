@@ -6,6 +6,8 @@
     margin-top: -20px;
     background: rgb(255, 255, 255);
     box-shadow: 0 2px 4px rgb(103, 102, 102);
+    overflow: hidden;
+    overflow-y: scroll;
     
 }
 .list-product-url{

@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom'
 import '../css/List_product.css'
 import { DataContext } from '../Context';
 
+
 function List_products(props) {
     const list_product = props.search_autocomplete;
+    function handle_search (){
+        console.log("Chon vao item truoc khi vao link")
+    }
     return (
-        <div className="list-product-container">
+        <div className="list-product-container" onClick={() => handle_search()}>
             {
                 list_product.map((product, index) => (
                     <Link to={`/product/${product.id}`} className="list-product-url">

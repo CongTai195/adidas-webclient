@@ -69,8 +69,10 @@ export class Check_order extends Component {
             .then(res => {
                 this.getListTransaction()
                 console.log("Huy don thanh cong")
+                alert("Hủy đơn thành công")
             }).catch(err => {
                 console.log("Loi huy don hang", err)
+                alert("Hủy đơn thất bại")
             });
     }
     componentDidMount() {

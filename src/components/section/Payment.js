@@ -71,19 +71,19 @@ export class Payment extends Component {
         const cart = this.context.cart
         console.log("data transaction: ", data)
         if(user.length == 0){
-            axios.post('https://shop-adidas.herokuapp.com/api/', data)
+            axios.post('/transaction', data)
             .then(res => {
                 if (res.data.status == "OK") {
                     this.context.resetCart(res.data.status)
-                    alert("Thêm thành công")
+                    alert("Thanh toán thành công")
                     console.log("post_transaction THANH CONG")
                     
                 }
                 //console.log("login:", res.data.results.info)
             })
             .catch(err => {
-                alert("Thêm thất bại")
-                console.log("post_transaction THAT BAI")
+                alert("Thanh toán thất bại")
+                console.log("post_transaction THAT BAI", err)
             });
         }
         else{
@@ -103,12 +103,13 @@ export class Payment extends Component {
                     }
                     this.context.resetCart(res.data.status)
                     console.log("post_transaction THANH CONG")
+                    alert("Thanh toán thành công")
                 }
                 //console.log("login:", res.data.results.info)
             })
             .catch(err => {
-
-                console.log("post_transaction THAT BAI")
+                alert("Thanh toán thất bại")
+                console.log("post_transaction THAT BAI", err)
             });
         }
     }

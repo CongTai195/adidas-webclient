@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 //import Products from './section/Products';
+import Main from './section/Main';
 import Details from './section/Details';
 import Login from './section/Login';
 import Cart from './section/Cart';
@@ -15,7 +16,8 @@ export class Section extends Component {
         return(
             <section>
                 {/* <Route path="/product" component={Products} exact/> */}
-                <Route path="/category/:id" component={Category} exact/>
+                <Route path="/home" component={Main} exact/>
+                <Route path="/category/:id" component={Category} />
                 <Route path="/product/:id" component={Details}/>
                 <Route path="/cart" component={Cart}/>
                 <Route path="/payment" component={Payment}/>

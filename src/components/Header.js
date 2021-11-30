@@ -14,32 +14,63 @@ export class Header extends Component {
     state = {
         toggle: false,
         search: [],
+        name_search: "",
         categorys: [],
         category_adi: [],
         category_adi_neo: [],
         category_adi_football: [],
         category_adi_basketball: [],
     }
+    cutUrl(string, val) {
+        //const value = this.state.value_search;
+
+        //const temp_name = ""
+        var temp = string
+        var len = temp.length;
+        var b = temp.search(val)
+
+        //list_index.push(temp.slice(0, b))
+        temp = temp.slice(b, len)
+
+        return temp
+    }
     setSearch = (search) => {
-        // console.log("Here: ", search)
+
         const products = this.context.products
+        // console.log("Here: ", products)
         let matches = []
         matches = products.filter(state => {
             const regex = new RegExp(`${search}`, "gi")//gi: khong phan biet chu hoa va thuong
-            return state.name.match(regex) ;//|| state.description.match(regex) || state.specifications.match(regex)
+            return state.name.match(regex);//|| state.description.match(regex) || state.specifications.match(regex)
         });
-        // console.log("Here: ", matches)
-        this.setState({search: matches})
-        if(search.length ===0){
-            this.setState({search: []})
+        //console.log("Here: ", matches)
+
+        this.setState({ search: matches })
+        try {
+            if (search != "") {
+                const temp_seracht = this.cutUrl(matches[0].name, search)
+                this.setState({ name_search: temp_seracht })
+            }
+            else {
+                this.setState({ name_search: "" })
+            }
+        }
+        catch (error) {
+            this.setState({ name_search: "" })
+        }
+        if (search.length === 0) {
+            this.setState({ search: [] })
         }
     }
     reset_search = () => {
-        this.setState({search: []})
+        this.setState({ search: [] })
+        this.setState({ name_search: "" })
     }
     componentDidMount() {
         //http://127.0.0.1:8000/api/category/10/product
-        axios.get('http://127.0.0.1:8000/api/category')
+        //https://shop-adidas.herokuapp.com/api/
+        //http://127.0.0.1:8000/api/category
+        axios.get('category')
             .then(res => {
                 //console.log("Data: ", res.length)
                 //category = res.data.results
@@ -112,7 +143,10 @@ export class Header extends Component {
                     </div>
                     <div className="navbar-center" onClick={() => this.reset_search()} >
                         <div className="navbar-header-logo">
-                            <img src={Logo} alt="" width="100" />
+                            <Link to="/home" className="navbar-header-logo-link">
+                                <img src={Logo} alt="" width="100" />
+                            </Link>
+
                         </div>
                         {/* -------------------------------------------- */}
                         <div className="collapse-navbar-collapse" >
@@ -188,10 +222,12 @@ export class Header extends Component {
                             </ul>
                         </div>
                         <div className="button-search">
-                            <img />
-                            <input type="text" id="btn-header-search" className="btn-search" placeholder="Tìm kiếm"
-                            onChange={(e) => this.setSearch(e.target.value)} 
-                            />
+                            <div className="button-search-container">
+                                <div className="search-autocomplete">{this.state.name_search}</div>
+                                <input type="text" id="btn-header-search" className="btn-search" placeholder="Tìm kiếm"
+                                    onChange={(e) => this.setSearch(e.target.value)}
+                                />
+                            </div>
                             {this.state.search && <List_products search_autocomplete={this.state.search} />}
                         </div>
                     </div>

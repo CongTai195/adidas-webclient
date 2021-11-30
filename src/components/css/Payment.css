@@ -18,7 +18,8 @@
 .payment .orderForm .row-radio-tt{
     padding: 15px 0; 
 }
-input[type = "text"]{
+.form-control{
+    /* input[type = "text"] */
     width: 100%;
     height: 40px;
     padding: 5px 10px;

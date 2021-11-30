@@ -71,24 +71,25 @@ export class Payment extends Component {
         const cart = this.context.cart
         console.log("data transaction: ", data)
         if(user.length == 0){
-            axios.post('/transaction', data)
+            axios.post('https://shop-adidas.herokuapp.com/api/', data)
             .then(res => {
                 if (res.data.status == "OK") {
                     this.context.resetCart(res.data.status)
+                    alert("Thêm thành công")
                     console.log("post_transaction THANH CONG")
                     
                 }
                 //console.log("login:", res.data.results.info)
             })
             .catch(err => {
-
+                alert("Thêm thất bại")
                 console.log("post_transaction THAT BAI")
             });
         }
         else{
             //Bearer như là cấp quyền truy cập cho người mang mã thông báo này
             const authAxios = axios.create({
-                baseURL: "http://127.0.0.1:8000/api/",
+                baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 },

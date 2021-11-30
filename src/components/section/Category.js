@@ -58,7 +58,7 @@ export class Category extends Component {
                 <div className="category-products" >
                     {
                         products.map(product => (
-                            <div className="category-products-cart" key={product.id}>
+                            <div className="category-products-cart" key={product.id} onClick={()=> {this.context.getDetailProduct(product.id)}}>
                                 <Link to={`/product/${product.id}`}>
                                     <img className="category-products-cart-img" src={product.image} />
                                 </Link>

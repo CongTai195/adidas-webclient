@@ -8,329 +8,18 @@ export class DataProvider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // products: [
-            //     {
-            //         // E:/4 (Ky 1 Nam 4)/PBL6/web_client/src/components
-            //         "_id": "001",
-            //         "title": "Shoes 0011",
-            //         "category": 1,
-            //         "src": "/giay_nam_01.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 10,
-            //         "size": [1, 2, 3, 4, 21, 22, 23, 24, 25],
-            //         "warehouse": [
-            //             {
-            //                 "id": 1,
-            //                 "product_id": 1,
-            //                 "size": 3,
-            //                 "color": "red",
-            //                 "quantity": 2,
-            //                 "src": "/giay_nam_01.png",
-            //             },
-            //             {
-            //                 "id": 2,
-            //                 "product_id": 1,
-            //                 "size": 4,
-            //                 "color": "black",
-            //                 "quantity": 3,
-            //                 "src": "/giay_nam_02.png",
-            //             },
-            //             {
-            //                 "id": 3,
-            //                 "product_id": 2,
-            //                 "size": 3,
-            //                 "color": "crimson",
-            //                 "quantity": 2,
-            //                 "src": "/giay_nam_03.png",
-            //             },
-            //             {
-            //                 "id": 3,
-            //                 "product_id": 2,
-            //                 "size": 3,
-            //                 "color": "teal",
-            //                 "quantity": 2,
-            //                 "src": "/giay_nam_04.png",
-            //             },
-            //         ]
-
-
-            //     },
-            //     {
-            //         // E:/4 (Ky 1 Nam 4)/PBL6/web_client/src/components
-            //         "_id": "1",
-            //         "title": "Shoes 01",
-            //         "category": 1,
-            //         "src": "/giay_nam_02.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 10,
-            //         "size": [1, 2, 3, 4, 21, 22, 23, 24, 25],
-
-            //     },
-            //     {
-            //         "_id": "2",
-            //         "title": "Shoes 02",
-            //         "category": 1,
-            //         "src": "/giay_nam_02.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 2700,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 5,
-            //         "size": [21, 22, 23, 24, 25],
-            //         "quantity": [{
-            //             21: 4,
-            //             22: 2,
-            //             23: 3,
-            //             24: 1,
-            //             25: 5
-            //         }]
-
-            //     },
-            //     {
-            //         "_id": "3",
-            //         "title": "Shoes 03",
-            //         "category": 1,
-            //         "src": "/giay_nam_03.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 9,
-            //         "size": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-
-            //     },
-            //     {
-            //         "_id": "4",
-            //         "title": "Shoes 04",
-            //         "category": 1,
-            //         "src": "/giay_nam_04.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 4000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 8,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "5",
-            //         "title": "Shoes 05",
-            //         "category": 1,
-            //         "src": "/giay_nam_05.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 3600,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 6,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "6",
-            //         "title": "Shoes 06",
-            //         "category": 1,
-            //         "src": "/giay_nam_06.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 6000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 7,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "7",
-            //         "title": "Shoes 07",
-            //         "category": 1,
-            //         "src": "/giay_nam_07.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 2300,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 4,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "8",
-            //         "title": "Shoes 08",
-            //         "category": 1,
-            //         "src": "/giay_nam_08.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 1000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 5,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "9",
-            //         "title": "Shoes 09",
-            //         "category": 1,
-            //         "src": "/giay_nam_09.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5400,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 3,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "10",
-            //         "title": "Shoes 010",
-            //         "category": 1,
-            //         "src": "/giay_nam_010.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 3000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 4,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "11",
-            //         "title": "Shoes 011",
-            //         "category": 2,
-            //         "src": "/giay_nu_01.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 10,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "12",
-            //         "title": "Shoes 012",
-            //         "category": 2,
-            //         "src": "/giay_nu_02.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 2700,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 5,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "13",
-            //         "title": "Shoes 013",
-            //         "category": 2,
-            //         "src": "/giay_nu_03.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 9,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "14",
-            //         "title": "Shoes 014",
-            //         "category": 2,
-            //         "src": "/giay_nu_04.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 4000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 8,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "15",
-            //         "title": "Shoes 015",
-            //         "category": 2,
-            //         "src": "/giay_nu_05.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 3600,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 6,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "16",
-            //         "title": "Shoes 016",
-            //         "category": 2,
-            //         "src": "/giay_nu_06.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 6000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 7,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "17",
-            //         "title": "Shoes 017",
-            //         "category": 2,
-            //         "src": "/giay_nu_07.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 2300,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 4,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "18",
-            //         "title": "Shoes 018",
-            //         "category": 2,
-            //         "src": "/giay_nu_08.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 1000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 5
-
-            //     },
-            //     {
-            //         "_id": "19",
-            //         "title": "Shoes 019",
-            //         "category": 2,
-            //         "src": "/giay_nu_09.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 5400,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 3,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     },
-            //     {
-            //         "_id": "20",
-            //         "title": "Shoes 020",
-            //         "category": 2,
-            //         "src": "/giay_nu_010.png",
-            //         "Description": "Giay bao dep sai 1 ngay hung lien nen dung mua",
-            //         "Content": "Khong biet ghi gi trong nay het a",
-            //         "price": 3000,
-            //         "colors": ["red", "black", "crimson", "teal"],
-            //         "count": 4,
-            //         "size": [21, 22, 23, 24, 25]
-
-            //     }
-            // ],
             products: [],
             cart: [],
             total: 0,
             category_product: [],
             user: [],
+            //-------
+            product_details: [],
+            size_details: [],
+            quantity_details: [],
+            category_details: 0,
+            specifications_details: [],
+
         }
     }
     componentDidMount() {
@@ -381,14 +70,69 @@ export class DataProvider extends Component {
     addProductsforCate = (product) => {
         this.setState({ products: product })
     }
+    cutUrl(string) {
+        var list_index = []
+        var temp = string
+        while (true) {
+            var len = temp.length;
+            var b = temp.search(";")
+            if (b == -1) {
+                list_index.push(temp.slice(b + 1, len))
+                break;
+            } else {
+                list_index.push(temp.slice(0, b))
+                temp = temp.slice(b + 2, len)
+            }
+
+        }
+        return list_index
+    }
+    getDetailProduct = (id) => {
+        const res = this.state.products;
+        //const res = this.state.tem_product;
+        const arr = []
+        const obj_temp_quanti = {}
+        const category_id = 0
+        var temp_size = 0
+        const data = res.filter(item => {
+            return item.id == id
+        })
+        for (const [key, val] of Object.entries(data)) {
+            for (const [key1, val1] of Object.entries(val)) {
+                if (key1 == "detail_products") {
+                    for (const [key2, val2] of Object.entries(val1)) {
+                        //Vao trong tung item cua list detail_products
+                        for (const [key3, val3] of Object.entries(val2)) {
+
+                            if (key3 == "size") {
+                                arr.push(val3)
+                                temp_size = val3
+                            }
+                            if (key3 == "quantity")
+                                obj_temp_quanti[temp_size] = val3
+                        }
+                    }
+                }
+                if (key1 == "specifications") {
+                    const arr_specification = this.cutUrl(val1)
+                    this.setState({ specifications_details: arr_specification })
+                }
+                //lay id category
+                if (key1 == "category_id") {
+                    this.setState({ category_details: val1 });
+                }
+            }
+        }
+        this.setState({ product_details: data, size_details: arr, quantity_details: obj_temp_quanti })
+
+    };
 
     // -------------------------------Cart----------------------------------------
     getCartuser = () => {
-
         const products = this.state.products
         //if(user != 0){
         const authAxios = axios.create({
-            baseURL: "http://127.0.0.1:8000/api",
+            baseURL: axios.baseURL, //"https://shop-adidas.herokuapp.com/api/",//http://127.0.0.1:8000/api
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
@@ -430,13 +174,14 @@ export class DataProvider extends Component {
             })
             .catch(err => {
                 console.log("detail cart THAT BAI")
+                console.log("Err", err)
             });
         //}
     }
 
     addCartforUser = (data) => {
         const authAxios = axios.create({
-            baseURL: "http://127.0.0.1:8000/api/",
+            baseURL: axios.baseURL, //"https://shop-adidas.herokuapp.com/api/",//http://127.0.0.1:8000/api/
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
@@ -473,6 +218,7 @@ export class DataProvider extends Component {
             const obj_yourcart = {}
             for (const [key, value] of Object.entries(data1)) {
                 //var temp_obj = {}
+                obj_yourcart.product_id = value.id
                 for (const [key1, value1] of Object.entries(value)) {
                     //console.log("key: ", key1, " value: ", value1)
                     if (key1 == "detail_products") {
@@ -533,11 +279,11 @@ export class DataProvider extends Component {
             //console.log("clear cart: ", this.state.cart)
             this.getAllproducts()
         }
-    }
+    };
     delete_cartuser = (data) => {
 
         const authAxios = axios.create({
-            baseURL: "http://127.0.0.1:8000/api/",
+            baseURL: axios.baseURL, //"https://shop-adidas.herokuapp.com/api/", //http://127.0.0.1:8000/api/",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
@@ -555,8 +301,7 @@ export class DataProvider extends Component {
 
                 console.log("delete cart THAT BAI")
             });
-    }
-
+    };
     removeProductinCart = (id) => {
         //console.log("removeProductinCart: ", id)
         const user = this.state.user
@@ -596,7 +341,7 @@ export class DataProvider extends Component {
 
         this.setState({ selectd_quantity: quantity })
 
-    }
+    };
 
     getTotal = () => {
         const { cart } = this.state;
@@ -605,20 +350,26 @@ export class DataProvider extends Component {
         }, 0)
 
         this.setState({ total: res })
-    }
+    };
     addUser = (user) => {
         this.setState({ user: user });
 
+    };
+    resetUser = (logout) => {
+        if (logout == "OK") {
+            this.setState({ user: [] });
+        }
     }
 
 
 
 
     render() {
-        const { products, cart, total, category_product, user, } = this.state;
+        const { products, cart, total, category_product, user,
+            product_details, size_details, quantity_details, category_details, specifications_details} = this.state;
         const { getAllproducts, addProductsforCate, addCart, resetCart, addSize, addQuantity,
-            removeProductinCart, getTotal, resultProductCategory, addUser, getCartuser,
-            addCartforUser, delete_cartuser } = this;
+            removeProductinCart, getTotal, resultProductCategory, addUser, resetUser, getCartuser,
+            addCartforUser, delete_cartuser, getDetailProduct } = this;
         // const {check_selectsize} = this;
         //console.log("Context Cart: ", cart)
         // console.log("Context total: ", total)
@@ -629,9 +380,10 @@ export class DataProvider extends Component {
             //</DataContext.Provider><DataContext.Provider value={{ state: this.state }}>
             <DataContext.Provider value={{
                 products, cart, total, category_product, user,
+                product_details, size_details, quantity_details, category_details, specifications_details,
                 getAllproducts, addProductsforCate, addCart, addSize, resetCart, addQuantity,
-                removeProductinCart, getTotal, resultProductCategory, addUser, getCartuser,
-                addCartforUser, delete_cartuser,
+                removeProductinCart, getTotal, resultProductCategory, addUser, resetUser, getCartuser,
+                addCartforUser, delete_cartuser, getDetailProduct
             }}>
                 {this.props.children}
             </DataContext.Provider>

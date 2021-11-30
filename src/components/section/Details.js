@@ -133,8 +133,8 @@ export class Details extends Component {
     //         // console.log("product_detail:  ", data)
     //     }
     // };
-    getProductCategory = (id) => {
-        //console.log("id:", id)
+    getProductCategory = () => {
+        const id = this.context.category_details;
         axios.get('category/' + id + '/product')
             .then(res => {
                 //console.log("Data: ", res)
@@ -146,8 +146,9 @@ export class Details extends Component {
     }
 
     getQuantity = (size) => {
+        const quantity = this.context.quantity_details;
         if (size != 0) {
-            for (const [key, val] of Object.entries(this.state.quantity)) {
+            for (const [key, val] of Object.entries(quantity)) {//this.state.quantity
                 if (key == size) {
                     //console.log("so luong sau khi chon size: ", val)
                     this.setState({ quantity_afchoo_size: val })
@@ -182,15 +183,25 @@ export class Details extends Component {
         })
     }
     componentDidMount() {
-        this.getProductDetailquerydb()
-        //this.getProduct()
-        //this.getProductCategory(this.state.category_id)
+        this.getProductCategory
+        //this.getProductDetailquerydb()
+        // //this.getProduct()
+        // //this.getProductCategory(this.state.category_id)
     }
     render() {
-        const { product } = this.state;
+        //const { product } = this.state;
         const select_images = this.state.select_images
-        const specification = this.state.specifications
+        //const specification = this.state.specifications
         const cart = this.context.cart;
+
+        //-------------------------------------
+        const product = this.context.product_details;
+        //console.log("product: ", product)
+        const size = this.context.size_details;
+        const specification = this.context.specifications_details;
+        
+        //-------------------------------------
+
         //console.log("specification : ", specification)
 
         //this.getQuantity()
@@ -232,7 +243,7 @@ export class Details extends Component {
                                 <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
                                 <div className="row-pick">
                                     <p>SIZE:{this.context.selected_size}</p>
-                                    <Sizepick size={this.state.size} sizeCallback={this.getQuantity} >{/*this.state.size*/}
+                                    <Sizepick size={size} sizeCallback={this.getQuantity} >{/*this.state.size*/}
                                     </Sizepick>
                                     <p>SỐ LƯỢNG</p>
                                     <Quantity quantity={this.state.quantity_afchoo_size} quantityCallback={this.select_quantity} />{/*this.state.quantity_afchoo_size*/}
@@ -252,11 +263,10 @@ export class Details extends Component {
                         </div>
                     ))
                 }
-                {/* <div className="detail-related-products">
+                {/* {<div className="detail-related-products">
                     <h2 className="detail-related-products-lable">Sản phẩm liên quan</h2>
                     <Related_products category_product={this.state.category_products} />
-
-                </div> */}
+                </div>} */}
                 <div className="category-yourcart">
                     <span className="category-yourcart-count">{cart.length}</span>
                     <img src={IconCateCart} alt="" width="40" />

@@ -3,19 +3,16 @@
     width: 380px;
     max-height: 350px;
     margin-left: -80px;
-    margin-top: -20px;
+    margin-top: 35px;
     background: rgb(255, 255, 255);
     box-shadow: 0 2px 4px rgb(103, 102, 102);
     overflow: hidden;
     overflow-y: scroll;
     
 }
-.list-product-url{
+.list-product-link{
     text-decoration: none;
     color: black;
-}
-.list-product-container-detail{
-    text-decoration: none;
     display: flex;
     max-height: 120px;
     max-width: 300px;

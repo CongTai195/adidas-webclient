@@ -5,7 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 
-axios.defaults.baseURL ='http://127.0.0.1:8000/api/'
+
+//http://127.0.0.1:8000/api
+axios.defaults.baseURL ='https://shop-adidas.herokuapp.com/api/'//https://shop-adidas.herokuapp.com/api
 
 ReactDOM.render(
   <React.StrictMode>

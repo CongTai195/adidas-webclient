@@ -21,18 +21,18 @@ export class Check_order extends Component {
     }
     getListTransaction = () => {
         const user = this.context.user
-        const id = user.id
+        // const id = user.id
 
         const authAxios = axios.create({
-            baseURL: "http://127.0.0.1:8000/api/",
+            baseURL: axios.baseURL, //"https://shop-adidas.herokuapp.com/api/",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
 
         });
-        authAxios.get('transaction/', id)
+        authAxios.get('transaction')
             .then(res => {
-                console.log("Data: ", res.data.results)
+                console.log("Data transaction: ", res.data.results)
                 const temp_orders = []
                 const temp_isActive = []
                 for (const [key, value] of Object.entries(res.data.results)) {
@@ -59,7 +59,7 @@ export class Check_order extends Component {
     cance_order(id){
         const data = { status: 0 }
         const authAxios = axios.create({
-            baseURL: "http://127.0.0.1:8000/api/",
+            baseURL: axios.baseURL, //"https://shop-adidas.herokuapp.com/api/",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },

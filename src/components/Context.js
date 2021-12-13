@@ -81,7 +81,7 @@ export class DataProvider extends Component {
                 break;
             } else {
                 list_index.push(temp.slice(0, b))
-                temp = temp.slice(b + 2, len)
+                temp = temp.slice(b + 1, len)
             }
 
         }
@@ -97,6 +97,7 @@ export class DataProvider extends Component {
         const data = res.filter(item => {
             return item.id == id
         })
+        
         for (const [key, val] of Object.entries(data)) {
             for (const [key1, val1] of Object.entries(val)) {
                 if (key1 == "detail_products") {
@@ -126,6 +127,7 @@ export class DataProvider extends Component {
         this.setState({ product_details: data, size_details: arr, quantity_details: obj_temp_quanti })
 
     };
+    
 
     // -------------------------------Cart----------------------------------------
     getCartuser = () => {
@@ -366,7 +368,7 @@ export class DataProvider extends Component {
 
     render() {
         const { products, cart, total, category_product, user,
-            product_details, size_details, quantity_details, category_details, specifications_details} = this.state;
+            product_details, size_details, quantity_details, category_details, specifications_details, address} = this.state;
         const { getAllproducts, addProductsforCate, addCart, resetCart, addSize, addQuantity,
             removeProductinCart, getTotal, resultProductCategory, addUser, resetUser, getCartuser,
             addCartforUser, delete_cartuser, getDetailProduct } = this;
@@ -380,7 +382,7 @@ export class DataProvider extends Component {
             //</DataContext.Provider><DataContext.Provider value={{ state: this.state }}>
             <DataContext.Provider value={{
                 products, cart, total, category_product, user,
-                product_details, size_details, quantity_details, category_details, specifications_details,
+                product_details, size_details, quantity_details, category_details, specifications_details, address,
                 getAllproducts, addProductsforCate, addCart, addSize, resetCart, addQuantity,
                 removeProductinCart, getTotal, resultProductCategory, addUser, resetUser, getCartuser,
                 addCartforUser, delete_cartuser, getDetailProduct

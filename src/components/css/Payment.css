@@ -27,6 +27,32 @@
     border: 1px solid #979292;
     color: #888;
 }
+/* ---------------Adress---------------- */
+.form-control .address-container-chil{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+.form-control-chil-1{
+    width: 46%;
+    height: 40px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    border: 1px solid #979292;
+    color: #888;
+}
+.form-control-chil-2{
+    width: 46%;
+    height: 40px;
+    padding: 5px 10px;
+    margin-left: 55px;
+    margin-bottom: 20px;
+    border: 1px solid #979292;
+    color: #888;
+}
+/* -----------------------------------  */
 .your-order{
     margin-top: 15px;
     width: 480px;

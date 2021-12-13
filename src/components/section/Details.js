@@ -8,7 +8,11 @@ import IconCateCart from '../img/category-cart.png'
 import Image_SizeChart from '../img/size_adidas.jpg'
 import Image_Slider from './Image_Slider';
 import Related_products from './Related_products';
+import StarRating from "./StarRating";
+import Rating from './Rating';
+import Comments from './Comments';
 import axios from 'axios';
+import ScrollToTop from '../ScrollToTop';
 import '../css/Details.css'
 // -------------------------------------
 import "slick-carousel/slick/slick.css";
@@ -29,7 +33,10 @@ export class Details extends Component {
         select_images: "",
         select_size: 0,
         select_quantity: 0,
-        quantity_afchoo_size: 0
+        quantity_afchoo_size: 0,
+        stars: 0,
+        comments: [],
+        showRating: false,
     }
     cutUrl(string) {
         var list_index = []
@@ -42,7 +49,7 @@ export class Details extends Component {
                 break;
             } else {
                 list_index.push(temp.slice(0, b))
-                temp = temp.slice(b + 2, len)
+                temp = temp.slice(b + 1, len)
             }
 
         }
@@ -94,45 +101,6 @@ export class Details extends Component {
                 console.log(err.data)
             });
     }
-
-    // getProduct = () => {
-    //     if (this.props.match.params.id) {
-    //         //const product = this.getProductDetailquerydb(this.props.match.params.id)
-    //         //console.log("Data product detail 2: ", product)
-    //         const res = this.context.products;
-    //         //const res = this.state.tem_product;
-    //         const arr = []
-    //         const obj_temp_quanti = {}
-    //         var temp_size = 0
-    //         const data = res.filter(item => {
-    //             return item.id == this.props.match.params.id
-    //         })
-
-    //         for (const [key, val] of Object.entries(data)) {
-    //             for (const [key1, val1] of Object.entries(val)) {
-    //                 if (key1 == "detail_products") {
-    //                     for (const [key2, val2] of Object.entries(val1)) {
-    //                         //Vao trong tung item cua list detail_products
-    //                         for (const [key3, val3] of Object.entries(val2)) {
-
-    //                             if (key3 == "size") {
-    //                                 arr.push(val3)
-    //                                 temp_size = val3
-    //                             }
-    //                             if (key3 == "quantity")
-    //                                 obj_temp_quanti[temp_size] = val3
-    //                         }
-    //                     }
-    //                 }
-    //                 if (key1 == "category_id") {
-    //                     this.setState({ category_id: val1 });
-    //                 }
-    //             }
-    //         }
-    //         this.setState({ product: data, size: arr, quantity: obj_temp_quanti })
-    //         // console.log("product_detail:  ", data)
-    //     }
-    // };
     getProductCategory = () => {
         const id = this.context.category_details;
         axios.get('category/' + id + '/product')
@@ -182,33 +150,93 @@ export class Details extends Component {
             quantity_afchoo_size: 0
         })
     }
+    // ---------------------------Rating for user-------------------------
+    checkUser = () => {
+        //localStorage.getItem('token')
+
+        const user = this.context.user
+        const comments = this.state.comments
+
+        if (user.length != 0) {
+            if (comments.length == 0) {
+                this.openRatingStars()
+            }
+            else {
+                const check = comments.every(item => {
+                    return item.user_id = user.id
+                })
+                if (check) {
+                    alert("Bạn đã đánh giá sản phẩm này rồi.")
+                    break;
+                } else {
+                    this.openRatingStars()
+                }
+                // for (let i = 0; i < comments.length; i++) {
+                //     if (user.id = comments[i].user_id) {
+                //         alert("Bạn đã đánh giá sản phẩm này rồi.")
+                //         break;
+                //     }
+                //     else {
+                //         this.openRatingStars()
+                //     }
+
+                // }
+            }
+        }
+        else {
+            alert("Vui lòng đăng nhập để phản hồi sản phẩm")
+        }
+    }
+    openRatingStars = () => {
+        const show = this.state.showRating
+        this.setState({ showRating: !show })
+    }
+    getCommentProduct = (id) => {
+
+        axios.get('comment/' + id)
+            .then(res => {
+                if ((res.data.results).length != 0) {
+                    const comment = res.data.results
+                    //console.log("comment: ", comment)
+                    var temp_stars = 0
+                    for (let i = 0; i < comment.length; i++) {
+                        temp_stars += parseInt(comment[i].star)
+
+                    }
+                    temp_stars = temp_stars / comment.length
+                    this.setState({ stars: temp_stars, comments: comment })
+                }
+                else {
+                    this.setState({ stars: 0 })
+                }
+
+            }).catch(err => {
+                console.log("Err: ", err)
+
+            });
+
+    }
+
     componentDidMount() {
         this.getProductCategory
+        this.getCommentProduct(this.props.match.params.id)
         //this.getProductDetailquerydb()
         // //this.getProduct()
-        // //this.getProductCategory(this.state.category_id)
+        // //this.getProductCategory(this.state.category_id) this.props.match.params.id
     }
+
     render() {
         //const { product } = this.state;
         const select_images = this.state.select_images
+        const comments = this.state.comments
         //const specification = this.state.specifications
         const cart = this.context.cart;
 
         //-------------------------------------
         const product = this.context.product_details;
-        //console.log("product: ", product)
+        // console.log("comments: ", this.state.comments)
         const size = this.context.size_details;
         const specification = this.context.specifications_details;
-        
-        //-------------------------------------
-
-        //console.log("specification : ", specification)
-
-        //this.getQuantity()
-        //console.log("category_product: ", this.state.category_products)
-        //console.log("detail: ", this.state.tem_product)
-        //console.log("quantity after seleted size: ", this.state.quantity_afchoo_size)
-
         return (
             <>
                 {
@@ -227,11 +255,7 @@ export class Details extends Component {
                                 <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
                                 <p className="details-box-label">Mô tả</p>
                                 <p>{product.description}</p>
-                                {/* <p>{product.Content}</p> */}
-                                {/* <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p> */}
-                                {/* <p>Color: </p> */}
-                                {/* <Colors colors={product.colors} /> */}
-                                <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+                                <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - -</p>
                                 <p className="details-box-label">Thông số</p>
                                 <ul className="details-box-specification-ul">
                                     {
@@ -260,13 +284,34 @@ export class Details extends Component {
                                     Thêm vào giỏ
                                 </Link> */}
                             </div>
+                            <div className="detail-user-commentfor-products">
+                                <div className="detail-user-commentfor-products-row">
+                                    <p className="detail-user-commentfor-products-label">ĐÁNH GIÁ</p>
+
+                                    <p className="detail-user-commentfor-products-user-ratingstars"
+                                        onClick={() => this.checkUser()}>phản hồi...</p>
+                                    <StarRating showRating={this.state.showRating} setShowRating={this.openRatingStars} />
+                                </div>
+                                <div className="detail-user-commentfor-products-rating">
+                                    <p className="detail-user-commentfor-products-rating-col-1">{this.state.stars} trên 5</p>
+                                    <div className="detail-user-commentfor-products-rating-col-2">
+                                        <Rating value={this.state.stars} val_width={30} />
+                                    </div>
+
+                                </div>
+
+                                <Comments comments={comments} />
+
+                            </div>
                         </div>
+
                     ))
                 }
                 {/* {<div className="detail-related-products">
                     <h2 className="detail-related-products-lable">Sản phẩm liên quan</h2>
                     <Related_products category_product={this.state.category_products} />
                 </div>} */}
+
                 <div className="category-yourcart">
                     <span className="category-yourcart-count">{cart.length}</span>
                     <img src={IconCateCart} alt="" width="40" />
@@ -274,6 +319,7 @@ export class Details extends Component {
 
                     </div>
                 </div>
+                <ScrollToTop />
             </>
         )
     }

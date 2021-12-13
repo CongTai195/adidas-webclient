@@ -40,6 +40,7 @@ export class Check_order extends Component {
                     for (const [key1, value1] of Object.entries(value)) {
                         if (key1 == "orders") {
                             temp_orders.push(value1)
+                            //console.log("temp_orders: ", value1)
                             temp_obj.isActive = false
                             temp_isActive.push(temp_obj)
                         }
@@ -84,6 +85,7 @@ export class Check_order extends Component {
         const transactions = this.state.transactions
         const orders = this.state.orders
         const isActives = this.state.isActives
+        
         // khi nguoi dung ko dang nhap
         if (user.length == 0) {
             return (

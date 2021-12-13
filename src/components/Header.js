@@ -81,26 +81,28 @@ export class Header extends Component {
                     for (const [key1, value1] of Object.entries(value)) {
                         if (key1 == "subs") {
                             for (const [key2, value2] of Object.entries(value1)) {
-                                // console.log("here: ", value2.id)
-                                if (value2.type == 1) {
-                                    this.setState(i => ({
-                                        category_adi: [...i.category_adi, value2]
-                                    }))
-                                }
-                                else if (value2.type == 2) {
-                                    this.setState(i => ({
-                                        category_adi_neo: [...i.category_adi_neo, value2]
-                                    }))
-                                }
-                                else if (value2.type == 3) {
-                                    this.setState(i => ({
-                                        category_adi_football: [...i.category_adi_football, value2]
-                                    }))
-                                }
-                                else {
-                                    this.setState(i => ({
-                                        category_adi_basketball: [...i.category_adi_basketball, value2]
-                                    }))
+                        
+                                switch(value2.type){
+                                    case 1:
+                                        this.setState(i => ({
+                                            category_adi: [...i.category_adi, value2]
+                                        }))
+                                        break;
+                                    case 2:
+                                        this.setState(i => ({
+                                            category_adi_neo: [...i.category_adi_neo, value2]
+                                        }))
+                                        break;
+                                    case 3:
+                                        this.setState(i => ({
+                                            category_adi_football: [...i.category_adi_football, value2]
+                                        }))
+                                        break;
+                                    case 4:
+                                        this.setState(i => ({
+                                            category_adi_basketball: [...i.category_adi_basketball, value2]
+                                        }))
+                                        break;
                                 }
                             }
 

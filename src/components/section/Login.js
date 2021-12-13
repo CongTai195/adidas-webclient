@@ -2,6 +2,7 @@ import React, { Component, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import '../css/Login.css'
 import { DataContext } from "../Context";
+
 import axios from 'axios';
 
 import Icon_done from '../img/icons8-done-30.png'
@@ -108,9 +109,9 @@ function Login() {
                     }
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 alert("Đăng nhập không thanh công. Vui lòng thử lại mật khẩu hoặc email")
-                //console.log("Err: ", err)
+                console.log("Err: ", err)
             });
     }
 

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { DataContext } from '../Context'
 import '../css/Payment.css'
+import Adress from './Adress';
 import axios from 'axios';
+
 
 export class Payment extends Component {
     static contextType = DataContext;
-
+    
     state = {
         user_name: "",
         user_email: "",
@@ -38,6 +40,7 @@ export class Payment extends Component {
     }
     add_Transaction() {
         const cart = this.context.cart
+        
         // 
         var user_name = this.state.user_name
         var user_email = this.state.user_email
@@ -50,14 +53,15 @@ export class Payment extends Component {
         // 
         for (const [key, val] of Object.entries(cart)) {
             const temp = {}
-            //console.log("aaa", val)
+            console.log("aaa", val)
             for (const [key1, val1] of Object.entries(val)) {
                 if(key1 == "product_id"){
                     temp.id= val1
                 }
-                if (key1 == "quantity" || key1 == "size") {
+                if (key1 == "quantity" || key1 == "size" || key1 == "price") {
                     temp[key1] = val1
                 }
+                
             }
             products.push(temp)
         }
@@ -116,8 +120,10 @@ export class Payment extends Component {
 
     render() {
         const { cart, total, user } = this.context;
+        
+        
         //const total = this.context.total;
-        // console.log("cart in payment: ", cart)
+        console.log("Address payment: ", this.state.user_address)
         if (user.length === 0) {
             return (
                 <div className="payment">
@@ -132,6 +138,7 @@ export class Payment extends Component {
                                 onChange={(e) => this.setEmail(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Địa chỉ"
                                 onChange={(e) => this.setAddress(e.target.value)} />
+                            <Adress addressCallBack={this.setAddress} address={this.state.user_address}/>
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
@@ -159,8 +166,8 @@ export class Payment extends Component {
                     <div className="your-order">
                         <h2>ĐƠN HÀNG</h2>
                         {
-                            cart.map(item => (
-                                <div className="row">
+                            cart.map((item, index) => (
+                                <div key={index} className="row">
                                     <div className="row-1">
                                         <p>{item.name}</p>
                                         <p>{(item.price).toLocaleString('vi-VN')} VNĐ</p>
@@ -201,13 +208,17 @@ export class Payment extends Component {
                         <h2>THÔNG TIN GIAO HÀNG</h2>
                         <div className="">
                             <input type="text" className="form-control" placeholder="HỌ TÊN" value={user.name}
-                                onChange={(e) => this.setName(e.target.value)} />
+                                onChange={(e) => this.setName(e.target.value)}
+                                onClick={(e) => this.setName(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Số điện thoại" value={user.phone}
-                                onChange={(e) => this.setPhone(e.target.value)} />
+                                onChange={(e) => this.setPhone(e.target.value)}
+                                onClick={(e) => this.setPhone(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Email" value={user.email}
-                                onChange={(e) => this.setEmail(e.target.value)} />
+                                onChange={(e) => this.setEmail(e.target.value)}
+                                onClick={(e) => this.setEmail(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Địa chỉ" value={user.address}
-                                onChange={(e) => this.setAddress(e.target.value)} />
+                                onChange={(e) => this.setAddress(e.target.value)}
+                                onClick={(e) => this.setAddress(e.target.value)} />
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
@@ -236,7 +247,7 @@ export class Payment extends Component {
                         <h2>ĐƠN HÀNG</h2>
                         {
                             cart.map((item, index) => (
-                                <div className="row" key={index}>
+                                <div key={index} className="row">
                                     <div className="row-1">
                                         <p>{item.name}</p>
                                         <p>{(item.price).toLocaleString('vi-VN')} VNĐ</p>

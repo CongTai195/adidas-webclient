@@ -4,6 +4,7 @@ import { DataContext } from '../Context'
 import axios from 'axios';
 import '../css/Category.css'
 import IconCateCart from '../img/category-cart.png'
+import ScrollToTop from '../ScrollToTop';
 // import '../css/bootstrap.css'
 
 
@@ -82,6 +83,7 @@ export class Category extends Component {
 
                     </div>
                 </div>
+                <ScrollToTop/>
             </div>
             // <div className="category-products d-flex container" >
             //     {

@@ -58,10 +58,9 @@ export class Payment extends Component {
                 if(key1 == "product_id"){
                     temp.id= val1
                 }
-                if (key1 == "quantity" || key1 == "size" || key1 == "price") {
+                if ( key1 == "name" || key1 == "image" ||key1 == "quantity" || key1 == "size" || key1 == "price") {
                     temp[key1] = val1
                 }
-                
             }
             products.push(temp)
         }

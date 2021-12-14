@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { add_src_http, cutUrlinSpecification, getFormatImageSource } from './utils'
 
 export const DataContext = React.createContext();
 
@@ -31,9 +32,20 @@ export class DataProvider extends Component {
         //http://127.0.0.1:8000/api/product
         axios.get('product')
             .then(res => {
-                // console.log("Data: ", res.length)
+                const products = res.data.results
+                console.log("Data: ", res.data.results)
+                for (const [key, val] of Object.entries(products)) {
+                    for (const [key1, val1] of Object.entries(val)){
+                        if(key1 == "image"){
+                            const val_img = getFormatImageSource(val1)
+                            val[key1] = val_img
+
+                        }
+                    }
+                }
+
                 this.setState({
-                    products: res.data.results
+                    products: products
                 });
                 //console.log("data: ", res.data.results)
             }).catch(err => {
@@ -70,23 +82,23 @@ export class DataProvider extends Component {
     addProductsforCate = (product) => {
         this.setState({ products: product })
     }
-    cutUrl(string) {
-        var list_index = []
-        var temp = string
-        while (true) {
-            var len = temp.length;
-            var b = temp.search(";")
-            if (b == -1) {
-                list_index.push(temp.slice(b + 1, len))
-                break;
-            } else {
-                list_index.push(temp.slice(0, b))
-                temp = temp.slice(b + 1, len)
-            }
+    // cutUrl(string) {
+    //     var list_index = []
+    //     var temp = string
+    //     while (true) {
+    //         var len = temp.length;
+    //         var b = temp.search(";")
+    //         if (b == -1) {
+    //             list_index.push(temp.slice(b + 1, len))
+    //             break;
+    //         } else {
+    //             list_index.push(temp.slice(0, b))
+    //             temp = temp.slice(b + 1, len)
+    //         }
 
-        }
-        return list_index
-    }
+    //     }
+    //     return list_index
+    // }
     getDetailProduct = (id) => {
         const res = this.state.products;
         //const res = this.state.tem_product;
@@ -97,7 +109,7 @@ export class DataProvider extends Component {
         const data = res.filter(item => {
             return item.id == id
         })
-        
+
         for (const [key, val] of Object.entries(data)) {
             for (const [key1, val1] of Object.entries(val)) {
                 if (key1 == "detail_products") {
@@ -115,7 +127,8 @@ export class DataProvider extends Component {
                     }
                 }
                 if (key1 == "specifications") {
-                    const arr_specification = this.cutUrl(val1)
+                    // const arr_specification = this.cutUrl(val1)
+                    const arr_specification = cutUrlinSpecification(val1)
                     this.setState({ specifications_details: arr_specification })
                 }
                 //lay id category
@@ -127,7 +140,7 @@ export class DataProvider extends Component {
         this.setState({ product_details: data, size_details: arr, quantity_details: obj_temp_quanti })
 
     };
-    
+
 
     // -------------------------------Cart----------------------------------------
     getCartuser = () => {
@@ -368,7 +381,7 @@ export class DataProvider extends Component {
 
     render() {
         const { products, cart, total, category_product, user,
-            product_details, size_details, quantity_details, category_details, specifications_details, address} = this.state;
+            product_details, size_details, quantity_details, category_details, specifications_details, address } = this.state;
         const { getAllproducts, addProductsforCate, addCart, resetCart, addSize, addQuantity,
             removeProductinCart, getTotal, resultProductCategory, addUser, resetUser, getCartuser,
             addCartforUser, delete_cartuser, getDetailProduct } = this;

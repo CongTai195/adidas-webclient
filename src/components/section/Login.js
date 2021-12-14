@@ -1,9 +1,9 @@
-import React, { Component, useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { Component, useState, useContext } from 'react';
 import '../css/Login.css'
-import { DataContext } from "../Context";
-
+import { DataContext } from '../Context';
 import axios from 'axios';
+import Verify from '../Verify'
+
 
 import Icon_done from '../img/icons8-done-30.png'
 
@@ -27,6 +27,10 @@ function Login() {
     // ---------------------switch to form---------------------------
     const [isActive_login, setIsActive_login] = useState(true);
     const [isActive_register, setIsActive_register] = useState(false);
+    // ---------------------switch to verify---------------------------
+    const [show_Verify, setShow_Verify] = useState(false);
+    const [id_Verify, setId_Verify] = useState();
+
 
     function register() {
         if (name_regis != "" || email_regis != "" || password_regis != "" ||
@@ -41,10 +45,18 @@ function Login() {
 
                 const data = { name, email, password, gender, address, phone }
                 axios.post('register', data)
-                    .then(() => {
-                        alert("Tạo thành công")
+                    .then(res => {
+                        if (res.data.status == "OK") {
+                            console.log("resgister: ", res.data.results)
+                            setId_Verify(res.data.results.id)
+                            setShow_Verify(!show_Verify)
+                            //alert("Tạo thành công")
+                        }
+                        else {
+
+                        }
                     })
-                    .catch(() => {
+                    .catch(err => {
                         alert("Tạo không thành công")
                         //console.log("Err: ", err)
                     });
@@ -154,7 +166,10 @@ function Login() {
                                 <input type="password" placeholder="Password"
                                     onChange={(e) => setPassword(e.target.value)} className="formcontrol1" required />
                             </div>
-                            <a className="btn-login" onClick={login}>ĐĂNG NHẬP</a>
+                            <div className="btn-submit">
+                                <a className="btn-login" onClick={login}>ĐĂNG NHẬP</a>
+                                <a className="btn-forget-password">Quên mật khẩu</a>
+                            </div>
                         </form>
                     </div>
                 ) : (
@@ -227,6 +242,7 @@ function Login() {
                                 </div>
                                 <a className="btn-register" onClick={register}>ĐĂNG KÝ</a>
                             </form>
+                            <Verify id={id_Verify} showVerify={show_Verify} setShow_Verify={setShow_Verify} setIsActive_login={setIsActive_login} setIsActive_register={setIsActive_register} />
                         </div>
                     ) : (
                         <div className="title-register-2">

@@ -162,25 +162,25 @@ export class Details extends Component {
                 this.openRatingStars()
             }
             else {
-                const check = comments.every(item => {
-                    return item.user_id = user.id
-                })
-                if (check) {
-                    alert("Bạn đã đánh giá sản phẩm này rồi.")
-                    break;
-                } else {
-                    this.openRatingStars()
-                }
-                // for (let i = 0; i < comments.length; i++) {
-                //     if (user.id = comments[i].user_id) {
-                //         alert("Bạn đã đánh giá sản phẩm này rồi.")
-                //         break;
-                //     }
-                //     else {
-                //         this.openRatingStars()
-                //     }
-
+                // const check = comments.every(item => {
+                //     return item.user_id = user.id
+                // })
+                // if (check) {
+                //     alert("Bạn đã đánh giá sản phẩm này rồi.")
+                //     // break;
+                // } else {
+                //     this.openRatingStars()
                 // }
+                for (let i = 0; i < comments.length; i++) {
+                    if (user.id = comments[i].user_id) {
+                        alert("Bạn đã đánh giá sản phẩm này rồi.")
+                        // break;
+                    }
+                    else {
+                        this.openRatingStars()
+                    }
+
+                }
             }
         }
         else {
@@ -288,9 +288,9 @@ export class Details extends Component {
                                 <div className="detail-user-commentfor-products-row">
                                     <p className="detail-user-commentfor-products-label">ĐÁNH GIÁ</p>
 
-                                    <p className="detail-user-commentfor-products-user-ratingstars"
+                                    {/* <p className="detail-user-commentfor-products-user-ratingstars"
                                         onClick={() => this.checkUser()}>phản hồi...</p>
-                                    <StarRating showRating={this.state.showRating} setShowRating={this.openRatingStars} />
+                                    <StarRating showRating={this.state.showRating} setShowRating={this.openRatingStars} /> */}
                                 </div>
                                 <div className="detail-user-commentfor-products-rating">
                                     <p className="detail-user-commentfor-products-rating-col-1">{this.state.stars} trên 5</p>

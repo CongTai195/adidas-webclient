@@ -246,9 +246,15 @@
     margin-bottom: 10px;
 }
 .detail-user-commentfor-products-user-ratingstars{
+    margin-top: 10px;
     float: right;
-    text-decoration-line: underline;
+    color: rgb(3, 3, 3);
     cursor: pointer;
+}
+.detail-user-commentfor-products-user-ratingstars:hover{
+    font-weight: 600;
+    color: rgb(3, 3, 3);
+    text-decoration-line: underline;
 }
 .detail-user-commentfor-products-rating{
     width: 100%;

@@ -23,14 +23,18 @@ export const getFormatImageSource = (imageSource) => {
     return customImageSource;
 }
 
-export const getImageListByString = (imageString, separator = imageListSeparator, formatImageSource = true) => {
-    let imageList = imageString.split(separator).map((x) => x.trim());
-
-    if (formatImageSource) {
-        imageList = imageList.map(getFormatImageSource);
+export const getImageListByString = (string) => {
+    var newString = ""
+    const arr_image = pri_cutUrlinImage_list(string)
+    for (let i = 0; i < arr_image.length; i++) {
+        const val = pri_getFormatImageSource(arr_image[i])
+        if (i != (arr_image.length - 1)) {
+            newString = newString + val + ";"
+        } else {
+            newString = newString + val
+        }
     }
-
-    return imageList;
+    return newString
 }
 
 
@@ -51,18 +55,27 @@ export const cutUrlinSpecification = (string) => {
     }
     return list_index
 }
-export const cutUrlinImage_list = (string) => {
+const pri_cutUrlinImage_list = (string) => {
     var list_index = []
     var temp = string
     while (true) {
         var len = temp.length;
-        var a = temp.search("https")
+        var a = 0
         var b = temp.search(".jpg")
-        if (a == -1 || b == -1) {
+        if (b == -1) {
             break;
         }
         list_index.push(temp.slice(a, b + 4))
         temp = temp.slice(b + 5, len)
     }
     return list_index
+}
+const pri_getFormatImageSource = (imageSource) => {
+    let customImageSource = imageSource.trim();
+
+    if (!customImageSource.startsWith('http')) {
+        customImageSource = `http://127.0.0.1:8000/${customImageSource}`
+    }
+
+    return customImageSource;
 }

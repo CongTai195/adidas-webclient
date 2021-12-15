@@ -3,6 +3,7 @@ import '../css/Login.css'
 import { DataContext } from '../Context';
 import axios from 'axios';
 import Verify from '../Verify'
+import ForgotPassword from '../page/ForgotPassword'
 
 
 import Icon_done from '../img/icons8-done-30.png'
@@ -30,6 +31,10 @@ function Login() {
     // ---------------------switch to verify---------------------------
     const [show_Verify, setShow_Verify] = useState(false);
     const [id_Verify, setId_Verify] = useState();
+
+    // ---------------------switch to forgot password-----------------
+    const [showForgot, setShowForgot] = useState(false)
+    
 
 
     function register() {
@@ -168,9 +173,12 @@ function Login() {
                             </div>
                             <div className="btn-submit">
                                 <a className="btn-login" onClick={login}>ĐĂNG NHẬP</a>
-                                <a className="btn-forget-password">Quên mật khẩu</a>
+                                <a className="btn-forget-password" onClick={() => setShowForgot(!showForgot) }>Quên mật khẩu</a>
                             </div>
+                            
                         </form>
+                        <ForgotPassword showForgot={showForgot} setShowForgot={setShowForgot} />
+                        
                     </div>
                 ) : (
                     <div className="container-login-1">

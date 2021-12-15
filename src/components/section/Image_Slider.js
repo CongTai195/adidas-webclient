@@ -18,9 +18,9 @@ function Image_Slider(props) {
         var temp = string
         while (true) {
             var len = temp.length;
-            var a = temp.search("https")
+            var a = 0
             var b = temp.search(".jpg")
-            if (a == -1 || b == -1) {
+            if (b == -1) {
                 break;
             }
             list_index.push(temp.slice(a, b + 4))

@@ -14,7 +14,7 @@ export class Cart extends Component {
 
     render() {
         const { cart, removeProductinCart, total } = this.context;
-        console.log("cart: ", cart)
+        // console.log("cart: ", cart)
         if (cart.length === 0) {
             return <h2 style={{ textAlign: "center" }}>Giỏ hàng</h2>
         }

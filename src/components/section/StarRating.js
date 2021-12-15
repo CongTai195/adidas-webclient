@@ -37,6 +37,7 @@ function StarRating(props) {
 
     const submit_comment = (order_id, product_id, star, content, img) => {
         const data = { order_id: order_id, product_id: product_id, star: star, content: content, image: img}
+        
         const authAxios = axios.create({
             baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
             headers: {
@@ -45,7 +46,7 @@ function StarRating(props) {
         });
         authAxios.post('/comment', data)
         .then(res => {
-            console.log("Hẻeeee", res)
+            
             if (res.data.status == "OK") {
                 props.setShowRating()
                 props.callback_getTransactions()

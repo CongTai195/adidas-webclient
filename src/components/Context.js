@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { add_src_http, cutUrlinSpecification, getFormatImageSource } from './utils'
+import { add_src_http, cutUrlinSpecification, getFormatImageSource, getImageListByString} from './utils'
 
 export const DataContext = React.createContext();
 
@@ -33,13 +33,16 @@ export class DataProvider extends Component {
         axios.get('product')
             .then(res => {
                 const products = res.data.results
-                console.log("Data: ", res.data.results)
+                //console.log("Data: ", res.data.results)
                 for (const [key, val] of Object.entries(products)) {
-                    for (const [key1, val1] of Object.entries(val)){
-                        if(key1 == "image"){
+                    for (const [key1, val1] of Object.entries(val)) {
+                        if (key1 == "image") {
                             const val_img = getFormatImageSource(val1)
                             val[key1] = val_img
-
+                        }
+                        if (key1 == "image_list") {
+                            const val_img = getImageListByString(val1)
+                            val[key1] = val_img
                         }
                     }
                 }

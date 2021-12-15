@@ -9,7 +9,7 @@ function index(props) {
     const [title, setTitle] = useState('')
 
     function submit(id, codeuser) {
-        axios.get('/verify', { params: { "ids" : [id], "code": codeuser }})
+        axios.post('/verify', { "ids" : [id], "code": codeuser })
             .then(res => {
                 console.log("id 1", id)
                 console.log("data verify", res)
@@ -17,13 +17,11 @@ function index(props) {
                     props.setShow_Verify(false)
                     props.setIsActive_login(true)
                     props.setIsActive_register(false)
-                    alert("Tạo tài khoản thành công")
+                    alert("Thành công")
                 }
             })
             .catch(err => {
-                console.log("id 2", ids)
                 alert("Mã xác thực sai")
-                console.log("Err: ", err)
             });
     }
 

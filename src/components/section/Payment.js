@@ -53,7 +53,7 @@ export class Payment extends Component {
         // 
         for (const [key, val] of Object.entries(cart)) {
             const temp = {}
-            console.log("aaa", val)
+            
             for (const [key1, val1] of Object.entries(val)) {
                 if(key1 == "product_id"){
                     temp.id= val1

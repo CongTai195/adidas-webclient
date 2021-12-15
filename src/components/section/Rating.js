@@ -7,18 +7,9 @@ function Rating(props) {
     function getStars(value) {
         const stars = []
         const [whole, part] = (parseFloat(value).toFixed(1)).toString().split(".");
-        if(parseInt(whole) != 0){
-            for (let i = 0; i < whole; i++) stars.push(100);
-        }
-        else{
-            for (let i = 0; i < 5; i++) stars.push(0);
-        }
-        if (parseInt(part)) {
-            stars.push(parseInt(part) * 10)
-        }
-        if (stars.length < 5) {
-            for (let i = 0; i < 5 - stars.length; i++) stars.push(i*0);
-        }
+        for (let i = 0; i < whole; i++) stars.push(100)
+        if (part != 0) stars.push(part * 10)
+        for (let i = whole; i < (part != 0 ? 4 : 5); i++) stars.push(0)
         return stars
     }
 

@@ -32,7 +32,7 @@ export class Check_order extends Component {
         });
         authAxios.get('transaction')
             .then(res => {
-                console.log("Data transaction: ", res.data.results)
+                // console.log("Data transaction: ", res.data.results)
                 const temp_orders = []
                 const temp_isActive = []
                 for (const [key, value] of Object.entries(res.data.results)) {
@@ -51,8 +51,6 @@ export class Check_order extends Component {
                 this.setState({
                     transactions: res.data.results, orders: temp_orders, isActives: temp_isActive,
                 });
-                console.log("Orders:  ", this.state.orders)
-                //console.log("data: ", res.data.results)
             }).catch(err => {
                 console.log("Err: ", err)
             });

@@ -1,3 +1,4 @@
+import Toastify from 'toastify-js'
 
 export const add_src_http = (string) => {
     const localhost = 'http://127.0.0.1:8000/'
@@ -37,7 +38,6 @@ export const getImageListByString = (string) => {
     return newString
 }
 
-
 export const cutUrlinSpecification = (string) => {
     var list_index = []
     var temp = string
@@ -54,6 +54,34 @@ export const cutUrlinSpecification = (string) => {
 
     }
     return list_index
+}
+
+export const Toast = (string, color, time) => {
+
+    return Toastify({
+        text: string,
+        className: "info",
+        newWindow: true,
+        position: "right",
+        duration: time,
+        style: {
+            display: "flex",
+            "min-width": "280px",
+            height: "40px",
+            color: "#fff",
+            background: color,
+            //"#f74747"
+            position: "fixed",
+            "margin-top": "87px",
+            "padding-right":"10px",
+            "padding-left":"10px",
+            right: "25px",
+            "font-size": "14px",
+            "justify-content": "center",
+            "align-items": "center",
+            "border-radius": '5px',
+        },
+    }).showToast();
 }
 const pri_cutUrlinImage_list = (string) => {
     var list_index = []

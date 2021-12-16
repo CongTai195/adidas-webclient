@@ -1,25 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { DataContext } from '../Context'
+import React, { useState } from 'react'
+
 import Data from '../data/data_address.json'
 
 function Adress(props) {
-    const context = useContext(DataContext)
     const address = Data
-    const fills_address = props.address
-    const [chooseDistricts, setDistrictsy] = useState(0);
-    const [getstatusDistricts, setstatusDistrictsy] = useState(false);
-    const [chooseWards, setWards] = useState(0);
-    const [getstatusWards, setstatusWards] = useState(false);
 
-    const [getProvince, setvalProvince] = useState("");
-    const [getDistricts, setvalDistricts] = useState("");
-    const [getWards, setvalWards] = useState("");
+    const [chooseDistricts, setDistrictsy] = useState(0);
+    const [chooseWards, setWards] = useState(0);
     
-    
-    function check_status() {
-        //if (getstatusDistricts && getstatusWards) {
-            props.addressCallBack(fills_address+", "+getProvince+", "+getDistricts+", "+getWards+".")
-        //}
+    function setvalProvince(province){
+        props.callBacksetProvince(province)
+    }
+    function setvalDistricts(districts){
+        props.callBacksetDistricts(districts)
+    }
+    function setvalWards(wards){
+        props.callBacksetWards(wards)
     }
 
 
@@ -28,7 +24,7 @@ function Adress(props) {
         <div className="address-container">
             <select className="form-control" onChange={(e) => {
                 setDistrictsy(e.target.options[e.target.options.selectedIndex].getAttribute('data-key')),
-                setvalProvince(e.target.value), setstatusDistrictsy(true)
+                setvalProvince(e.target.value)
             }}>
                 <option key="0" >Tỉnh/ Thành phố</option>
                 {
@@ -41,7 +37,7 @@ function Adress(props) {
             <div className="address-container-chil">
                 <select className="form-control-chil-1" onChange={(e) => {
                     setWards(e.target.options[e.target.options.selectedIndex].getAttribute('data-key')),
-                    setvalDistricts(e.target.value), setstatusWards(true)
+                    setvalDistricts(e.target.value)
                 }}>
                     <option key="0" >Quận/ Huyện</option>
                     {
@@ -51,8 +47,7 @@ function Adress(props) {
                     }
                 </select>
                 <select className="form-control-chil-2" onChange={(e) => {
-                    
-                    setvalWards(e.target.value),check_status()
+                    setvalWards(e.target.value)
                 }}>
                     <option key="0" >Phường/ Xã</option>
                     {

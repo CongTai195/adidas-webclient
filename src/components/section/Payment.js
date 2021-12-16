@@ -4,10 +4,12 @@ import '../css/Payment.css'
 import Adress from './Adress';
 import axios from 'axios';
 
+import { Toast } from '../utils'
+
 
 export class Payment extends Component {
     static contextType = DataContext;
-    
+
     state = {
         user_name: "",
         user_email: "",
@@ -15,9 +17,14 @@ export class Payment extends Component {
         user_phone: "",
         payment: "",
         shipping: "Giao hàng nhanh",
+        //
+        province: "",
+        districts:"",
+        wards:"",
 
     }
     componentDidMount() {
+
 
     }
     setName = (name) => {
@@ -38,13 +45,28 @@ export class Payment extends Component {
     setShipping = (shipping) => {
         this.setState({ shipping: shipping })
     }
+    setProvince = (province) => {
+        this.setState({ province: province })
+    }
+    setDistricts = (districts) => {
+        this.setState({districts: districts})
+    }
+    setWards = (wards) => {
+        this.setState({wards: wards})
+    }
     add_Transaction() {
         const cart = this.context.cart
+        const user = this.context.user
         
-        // 
         var user_name = this.state.user_name
         var user_email = this.state.user_email
-        var user_address = this.state.user_address
+        if(user.length == 0){
+            
+            var user_address = this.state.user_address + ", "+ this.state.wards + ", "+ this.state.districts + ", " + this.state.province + "."
+        }else{
+            var user_address = this.state.user_address
+        }
+        
         var user_phone = this.state.user_phone
         var amount = this.context.total
         var payment = this.state.payment
@@ -53,12 +75,12 @@ export class Payment extends Component {
         // 
         for (const [key, val] of Object.entries(cart)) {
             const temp = {}
-            
+
             for (const [key1, val1] of Object.entries(val)) {
-                if(key1 == "product_id"){
-                    temp.id= val1
+                if (key1 == "product_id") {
+                    temp.id = val1
                 }
-                if ( key1 == "name" || key1 == "image" ||key1 == "quantity" || key1 == "size" || key1 == "price") {
+                if (key1 == "name" || key1 == "image" || key1 == "quantity" || key1 == "size" || key1 == "price") {
                     temp[key1] = val1
                 }
             }
@@ -73,23 +95,26 @@ export class Payment extends Component {
         const user = this.context.user
         const cart = this.context.cart
         console.log("data transaction: ", data)
-        if(user.length == 0){
+        if (user.length == 0) {
             axios.post('/transaction', data)
-            .then(res => {
-                if (res.data.status == "OK") {
-                    this.context.resetCart(res.data.status)
-                    alert("Thanh toán thành công")
-                    console.log("post_transaction THANH CONG")
-                    
-                }
-                //console.log("login:", res.data.results.info)
-            })
-            .catch(err => {
-                alert("Thanh toán thất bại")
-                console.log("post_transaction THAT BAI", err)
-            });
+                .then(res => {
+                    if (res.data.status == "OK") {
+                        this.context.resetCart(res.data.status)
+                        //alert("Thanh toán thành công")
+                        Toast("Thanh toán thành công", "#3b741b", 4000)
+                        //console.log("post_transaction THANH CONG")
+
+                    }
+                    //console.log("login:", res.data.results.info)
+                })
+                .catch(err => {
+                    //alert("Thanh toán thất bại")
+                    console.log("post_transaction THAT BAI", err)
+                    Toast("Thanh toán thất bại", "#f74747", 4000)
+                    //Toast("Thành công", "#3b741b", 4000)
+                });
         }
-        else{
+        else {
             //Bearer như là cấp quyền truy cập cho người mang mã thông báo này
             const authAxios = axios.create({
                 baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
@@ -99,30 +124,33 @@ export class Payment extends Component {
 
             });
             authAxios.post('/transaction', data)
-            .then(res => {
-                if (res.data.status == "OK") {
-                    for (const [key, val] of Object.entries(cart)) {
-                        this.context.delete_cartuser(val.id)
+                .then(res => {
+                    if (res.data.status == "OK") {
+                        for (const [key, val] of Object.entries(cart)) {
+                            this.context.delete_cartuser(val.id)
+                        }
+                        this.context.resetCart(res.data.status)
+                        //console.log("post_transaction THANH CONG")
+                        //alert("Thanh toán thành công")
+                        Toast("Thanh toán thành công", "#3b741b", 4000)
                     }
-                    this.context.resetCart(res.data.status)
-                    console.log("post_transaction THANH CONG")
-                    alert("Thanh toán thành công")
-                }
-                //console.log("login:", res.data.results.info)
-            })
-            .catch(err => {
-                alert("Thanh toán thất bại")
-                console.log("post_transaction THAT BAI", err)
-            });
+                    //console.log("login:", res.data.results.info)
+                })
+                .catch(err => {
+                    alert("Thanh toán thất bại")
+                    console.log("post_transaction THAT BAI", err)
+                    Toast("Thanh toán thất bại", "#f74747", 4000)
+
+                });
         }
     }
 
     render() {
         const { cart, total, user } = this.context;
-        
-        
+        // console.log(".....", this.state.province)
+
         //const total = this.context.total;
-        console.log("Address payment: ", this.state.user_address)
+        // console.log("Address payment: ", this.state.user_address)
         if (user.length === 0) {
             return (
                 <div className="payment">
@@ -137,7 +165,8 @@ export class Payment extends Component {
                                 onChange={(e) => this.setEmail(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Địa chỉ"
                                 onChange={(e) => this.setAddress(e.target.value)} />
-                            <Adress addressCallBack={this.setAddress} address={this.state.user_address}/>
+                            <Adress address={this.state.user_address} callBacksetProvince={this.setProvince}
+                                    callBacksetDistricts={this.setDistricts} callBacksetWards={this.setWards}/>
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
@@ -221,23 +250,23 @@ export class Payment extends Component {
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
-                            <input type="radio" className="dbt" value="Giao hàng nhanh" checked="checked" 
+                            <input type="radio" className="dbt" value="Giao hàng nhanh" checked="checked"
                                 onChange={(e) => this.setShipping(e.target.value)}
                             /> Giao hàng nhanh
                         </div>
                         <h2>PHƯƠNG THỨC THANH TOÁN</h2>
                         <div className="row-radio-tt">
-                            <input type="radio" name="gender" className="dbt" value="Thanh toán trực tiếp khi giao hàng" 
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán trực tiếp khi giao hàng"
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán trực tiếp khi giao hàng
                         </div>
                         <div className="row-radio-tt">
-                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng thẻ quốc tế và nội địa (ATM)" 
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng thẻ quốc tế và nội địa (ATM)"
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
                         </div>
                         <div className="row-radio-tt">
-                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng ví MoMo" 
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng ví MoMo"
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán bằng ví MoMo
                         </div>

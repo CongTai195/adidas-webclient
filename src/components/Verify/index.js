@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { Toast } from '../utils'
 import '../Verify/index.css'
 
 function index(props) {
@@ -17,11 +18,13 @@ function index(props) {
                     props.setShow_Verify(false)
                     props.setIsActive_login(true)
                     props.setIsActive_register(false)
-                    alert("Thành công")
+                    // alert("Thành công")
+                    Toast("Thành công", "#3b741b", 5000)
                 }
             })
             .catch(err => {
-                alert("Mã xác thực sai")
+                // alert("Mã xác thực sai")
+                Toast("Mã xác thực sai", "#f74747", 5000)
             });
     }
 

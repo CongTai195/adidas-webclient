@@ -3,6 +3,7 @@ import { DataContext } from '../Context'
 import axios from 'axios'
 import iconCheck_Ok from '../img/check-ok-30.png'
 import StarRating from './StarRating'
+import { Toast } from '../utils'
 import '../css/Check_order.css'
 
 export class Check_order extends Component {
@@ -68,10 +69,13 @@ export class Check_order extends Component {
             .then(res => {
                 this.getListTransaction()
                 console.log("Huy don thanh cong")
-                alert("Hủy đơn thành công")
+                //alert("Hủy đơn thành công")
+                Toast("Hủy đơn thành công", "#3b741b", 4000)
             }).catch(err => {
                 console.log("Loi huy don hang", err)
-                alert("Hủy đơn thất bại")
+                //alert("Hủy đơn thất bại")
+                Toast("Hủy đơn thất bại", "#f74747", 4000)
+                
             });
     }
     // -------------------star rating------------

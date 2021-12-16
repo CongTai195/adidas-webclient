@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
+import '../utils'
 import '../css/StarRating.css'
 
 
@@ -50,13 +51,16 @@ function StarRating(props) {
             if (res.data.status == "OK") {
                 props.setShowRating()
                 props.callback_getTransactions()
-                alert("Phản hồi thành công")
+                //alert("Phản hồi thành công")
+                Toast("Phản hồi thành công", "#3b741b", 4000)
             }
             //console.log("login:", res.data.results.info)
         })
         .catch(err => {
-            alert("Phản hồi thất bại")
-            console.log("post_transaction THAT BAI", err)
+            // alert("Phản hồi thất bại")
+            Toast("Phản hồi thất bại", "#f74747", 4000)
+                
+            //console.log("post_transaction THAT BAI", err)
         });
     }
     return (

@@ -1,4 +1,4 @@
-import React, { Component, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import '../css/Login.css'
 import { DataContext } from '../Context';
 import axios from 'axios';
@@ -6,7 +6,9 @@ import Verify from '../Verify'
 import ForgotPassword from '../page/ForgotPassword'
 
 
+import { Toast } from '../utils'
 import Icon_done from '../img/icons8-done-30.png'
+
 
 //export class Login extends Component {
 function Login() {
@@ -34,7 +36,7 @@ function Login() {
 
     // ---------------------switch to forgot password-----------------
     const [showForgot, setShowForgot] = useState(false)
-    
+
 
 
     function register() {
@@ -56,21 +58,25 @@ function Login() {
                             setId_Verify(res.data.results.id)
                             setShow_Verify(!show_Verify)
                             //alert("Tạo thành công")
+                            Toast("Tạo thành công", "#3b741b", 4000)
                         }
                         else {
 
                         }
                     })
                     .catch(err => {
-                        alert("Tạo không thành công")
+                        // alert("Tạo không thành công")
+                        Toast("Tạo không thành công", "#f74747", 4000)
                         //console.log("Err: ", err)
                     });
             }
             else {
-                alert("Vui lòng nhập đúng số điện thoại")
+                // alert("Vui lòng nhập đúng số điện thoại")
+                Toast("Vui lòng nhập đúng số điện thoại", "#f74747", 4000)
             }
         } else {
-            alert("Vui lòng nhập đầy đủ thông tin")
+            // alert("Vui lòng nhập đầy đủ thông tin")
+            Toast("Vui lòng nhập đầy đủ thông tin", "#f74747", 4000)
         }
 
 
@@ -78,58 +84,64 @@ function Login() {
 
     function login() {
         //console.warn(email, password)
-        const data = { email, password }
+        // const data = { email, password }
 
         //console.log("login data moi nhap sau khi warn 2:", data)
-        axios.post('login', data)
-            .then(res => {
-                if (res.data.status == "OK") {
-                    // Kiểm tra đăng nhập, add user vào context, lưu token vào tròn localStorage,
-                    // kiểm tra xem người dùng có thêm sản phẩm nào vào giỏ hàng trước đó không
-                    // nếu có thì add vào database và rest cart trong context lại, và load lại giỏ hàng từ db
-                    // xuống rồi add vào lại context
-                    // Nếu không thì thì get cart từ db xuống
-                    //console.log("Data", res.data)
-                    //console.log("Thanh congggggggggg")
-                    context.addUser(res.data.results.info)
-                    //console.log("Token", res.data.results.token)
-                    localStorage.setItem('token', res.data.results.token);
+        if (email != "" || password != "") {
+            const data = { email, password }
+            axios.post('login', data)
+                .then(res => {
+                    if (res.data.status == "OK") {
+                        // Kiểm tra đăng nhập, add user vào context, lưu token vào tròn localStorage,
+                        // kiểm tra xem người dùng có thêm sản phẩm nào vào giỏ hàng trước đó không
+                        // nếu có thì add vào database và rest cart trong context lại, và load lại giỏ hàng từ db
+                        // xuống rồi add vào lại context
+                        // Nếu không thì thì get cart từ db xuống
+                        //console.log("Data", res.data)
+                        //console.log("Thanh congggggggggg")
+                        context.addUser(res.data.results.info)
+                        //console.log("Token", res.data.results.token)
+                        localStorage.setItem('token', res.data.results.token);
 
 
 
-                    if (cart.length != 0) {
-                        if (window.confirm("Bạn có muốn thêm các sản phẩm đã chọn trước đó vào giỏ hàng không. " + res.data.results.info.name)) {
-                            for (const [, value] of Object.entries(cart)) {
-                                const temp = {}
-                                temp.user_id = res.data.results.info.id
-                                for (const [key1, value1] of Object.entries(value)) {
-                                    if (key1 == "id")
-                                        temp.product_id = value1
-                                    if (key1 == "quantity")
-                                        temp.quantity = value1
-                                    if (key1 == "size")
-                                        temp.size = value1
+                        if (cart.length != 0) {
+                            if (window.confirm("Bạn có muốn thêm các sản phẩm đã chọn trước đó vào giỏ hàng không. " + res.data.results.info.name)) {
+                                for (const [, value] of Object.entries(cart)) {
+                                    const temp = {}
+                                    temp.user_id = res.data.results.info.id
+                                    for (const [key1, value1] of Object.entries(value)) {
+                                        if (key1 == "id")
+                                            temp.product_id = value1
+                                        if (key1 == "quantity")
+                                            temp.quantity = value1
+                                        if (key1 == "size")
+                                            temp.size = value1
+                                    }
+                                    context.addCartforUser(temp)
                                 }
-                                context.addCartforUser(temp)
+                                context.resetCart(res.data.status)
+                                context.getCartuser()
                             }
-                            context.resetCart(res.data.status)
-                            context.getCartuser()
+                            else {
+                                context.resetCart(res.data.status)
+                                context.getCartuser()
+                            }
+
                         }
                         else {
-                            context.resetCart(res.data.status)
                             context.getCartuser()
                         }
-
                     }
-                    else {
-                        context.getCartuser()
-                    }
-                }
-            })
-            .catch((err) => {
-                alert("Đăng nhập không thanh công. Vui lòng thử lại mật khẩu hoặc email")
-                console.log("Err: ", err)
-            });
+                })
+                .catch((err) => {
+                    // alert("Đăng nhập không thanh công. Vui lòng thử lại mật khẩu hoặc email")
+                    Toast("Đăng nhập không thành công. Vui lòng thử lại mật khẩu hoặc email", "#f74747", 4000)
+                    console.log("Err: ", err)
+                });
+        }else{
+            Toast("Vui lòng nhập đầy đủ thông tin", "#f74747", 4000)
+        }
     }
 
     function logout() {
@@ -146,15 +158,19 @@ function Login() {
                     console.log("Log out hanh congggggggggg")
                     context.resetUser(res.data.status)
                     context.resetCart(res.data.status)
-                    localStorage.setItem('token', "");
-                    alert("Đăng xuất thành công.")
+                    localStorage.setItem('token', "")
+                    Toast("Đăng xuất thành công", "#f74747", 4000)
+                    setEmail("")
+                    setPassword("")
                 }
             })
             .catch(() => {
-                alert("Đăng xuất không thành công.")
+                //alert("Đăng xuất không thành công.")
                 //console.log("Err: ", err)
+                Toast("Đăng xuất không thành công", "#f74747", 4000)
             });
     }
+
 
     if (user.length === 0) {
         return (
@@ -173,18 +189,20 @@ function Login() {
                             </div>
                             <div className="btn-submit">
                                 <a className="btn-login" onClick={login}>ĐĂNG NHẬP</a>
-                                <a className="btn-forget-password" onClick={() => setShowForgot(!showForgot) }>Quên mật khẩu</a>
+                                {/* <a className="btn-login" onClick={() => Toast("Đăng xuất thành công", "#f74747", 5000)}>ĐĂNG NHẬP</a> */}
+                                <a className="btn-forget-password" onClick={() => setShowForgot(!showForgot)}>Quên mật khẩu</a>
                             </div>
-                            
+
                         </form>
-                        <ForgotPassword showForgot={showForgot} setShowForgot={setShowForgot} />
-                        
+                        <ForgotPassword showForgot={showForgot} setShowForgot={setShowForgot} email={email}/>
+
                     </div>
                 ) : (
                     <div className="container-login-1">
                         <h2>ĐĂNG NHẬP</h2>
                         <p className="container-login-1-label">Hãy đăng nhập và trải nghiệm nào</p>
                         <a className="btn-login" onClick={(e) => { setIsActive_register(!isActive_register), setIsActive_login(!isActive_login) }}>ĐĂNG NHẬP</a>
+
                     </div>
 
                 )}

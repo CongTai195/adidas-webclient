@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Verify from '../../Verify'
 import axios from 'axios'
+import { Toast } from '../../utils'
 import '../ForgotPassword/index.css'
 
 function index(props) {
     const showForgot = props.showForgot
+    const email = props.email
     
     const [show_Verify, setShow_Verify] = useState(false)
 
@@ -18,7 +20,7 @@ function index(props) {
     const [isActive_register, setIsActive_register] = useState(false);
 
     function submit_forgot(email, password, confirmPassword) {
-        if (password != confirmPassword){
+        if (password != confirmPassword) {
             alert("Nhập đúng giúp 2 cái mật khẩu bạn nhé.")
         }
         else {
@@ -30,16 +32,21 @@ function index(props) {
                         setIdUser_Verify(res.data.results.id)
                         setShow_Verify(!show_Verify)
                         //setShowForgot(!showForgot)
-                        
+
                         //alert("Tạo thành công")
                     }
                 })
                 .catch(err => {
-                    alert("Đổi mật khẩu không thành công")
+                    //alert("Đổi mật khẩu không thành công")
                     //console.log("Err: ", err)
+                    Toast("Đổi mật khẩu không thành công", "#f74747", 4000)
+                    //Toast("Thành công", "#3b741b", 5000)
                 });
         }
     }
+    useEffect(()=>{
+        //document.getElementById("forgot-password-email").setAttributeNS('value', email)
+    })
 
     return (
         <>
@@ -52,16 +59,17 @@ function index(props) {
                             </div>
                             <div className="forgot-password-form">
                                 <p>Nhập địa chỉ Email*</p>
-                                <input type="email" className="forgot-password-input" onChange={(e) => setEmail(e.target.value)}/>
+                                <input type="email" id="forgot-password-email" className="forgot-password-input"
+                                    value="" onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className="forgot-password-form-password">
                                 <div className="forgot-password-form">
                                     <p>Nhập mật khẩu*</p>
-                                    <input type="password" className="forgot-password-input" onChange={(e) => setPassword(e.target.value)}/>
+                                    <input type="password" className="forgot-password-input" onChange={(e) => setPassword(e.target.value)} />
                                 </div>
                                 <div className="forgot-password-form">
                                     <p>Nhập lại mật khẩu*</p>
-                                    <input type="password" className="forgot-password-input" onChange={(e) => setConfirmPassword(e.target.value)}/>
+                                    <input type="password" className="forgot-password-input" onChange={(e) => setConfirmPassword(e.target.value)} />
                                 </div>
                             </div>
                             <div className="forgot-password-btn">

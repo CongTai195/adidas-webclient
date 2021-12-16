@@ -293,7 +293,7 @@ export class Details extends Component {
                                     <StarRating showRating={this.state.showRating} setShowRating={this.openRatingStars} /> */}
                                 </div>
                                 <div className="detail-user-commentfor-products-rating">
-                                    <p className="detail-user-commentfor-products-rating-col-1">{(this.state.stars).toFixed(1)} trên 5</p>
+                                    <p className="detail-user-commentfor-products-rating-col-1">{(this.state.stars).toFixed(1) == 0.0 ? 0 : (this.state.stars).toFixed(1)} trên 5</p>
                                     <div className="detail-user-commentfor-products-rating-col-2">
                                         <Rating value={this.state.stars} val_width={30} />
                                     </div>

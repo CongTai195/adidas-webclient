@@ -73,8 +73,8 @@ export const Toast = (string, color, time) => {
             //"#f74747"
             position: "fixed",
             "margin-top": "87px",
-            "padding-right":"10px",
-            "padding-left":"10px",
+            "padding-right": "10px",
+            "padding-left": "10px",
             right: "25px",
             "font-size": "14px",
             "justify-content": "center",
@@ -106,4 +106,32 @@ const pri_getFormatImageSource = (imageSource) => {
     }
 
     return customImageSource;
+}
+export const getFormatVnPaySource = (vnpaySource) => {
+    let customImageSource = vnpaySource.trim();
+    let index = customImageSource.search('vnp_ResponseCode')
+
+    if (index != -1) {
+        let check = customImageSource.slice(index + 17, index + 17 + 2)
+        if (check == "00") {
+            return 1
+        }
+        else {
+            let length_string = customImageSource.length;
+            let index_false = customImageSource.search('vnp_TxnRef')
+            let temp_string = customImageSource.slice(index_false, length_string)
+            let val_TxnRef = temp_string.slice(11, temp_string.search('&'))
+            return parseInt(val_TxnRef)
+        }
+    }
+    else {
+        return 0
+    }
+}
+export const getFormatVnPay_DateSource = (vnpaySource) => {
+    let customImageSource = vnpaySource.trim();
+    customImageSource.search('vnp_PayDate');
+    let date_pay = customImageSource.slice((customImageSource.search('vnp_PayDate') + 12), (customImageSource.search('vnp_PayDate') + 12 + 14))
+    let string_date = "Vào lúc " + date_pay.slice(10, 12) + ":" + date_pay.slice(8, 10) + " ngày " + date_pay.slice(6, 8) + "/" + date_pay.slice(4, 6) + "/" + date_pay.slice(0, 4)
+    return string_date
 }

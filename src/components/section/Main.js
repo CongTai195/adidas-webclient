@@ -14,7 +14,7 @@ export class Main extends Component {
         return (
             <div className="main-container">
                 <video autoPlay loop muted className="main-container-video">
-                    <source src={link} type="video/mp4" />
+                    <source src={link} type="video/mp4" className=''/>
                 </video>
                 <div className="main-container-row" >
                     <h2 >ULTRABOOST</h2>

@@ -1,9 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import '../css/Login.css'
 import { DataContext } from '../Context';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Verify from '../Verify'
 import ForgotPassword from '../page/ForgotPassword'
+import Cart from './Cart';
 
 
 import { Toast } from '../utils'
@@ -37,8 +39,6 @@ function Login() {
     // ---------------------switch to forgot password-----------------
     const [showForgot, setShowForgot] = useState(false)
 
-
-
     function register() {
         if (name_regis != "" || email_regis != "" || password_regis != "" ||
             address_regis != "" || phone_regis != "") {
@@ -60,14 +60,15 @@ function Login() {
                             //alert("Tạo thành công")
                             Toast("Tạo thành công", "#3b741b", 4000)
                         }
-                        else {
-
-                        }
                     })
                     .catch(err => {
                         // alert("Tạo không thành công")
                         Toast("Tạo không thành công", "#f74747", 4000)
-                        //console.log("Err: ", err)
+                        //console.log("Err: ", err.response)
+                        // if(err.response.data.status == "NG"){
+                        //     console.log("register", err.response.data.errors)
+                        //     const errors = err.response.data.errors
+                        // }
                     });
             }
             else {
@@ -82,12 +83,9 @@ function Login() {
 
     }
 
-    function login() {
-        //console.warn(email, password)
-        // const data = { email, password }
-
-        //console.log("login data moi nhap sau khi warn 2:", data)
+    const login = (email, password) => {
         if (email != "" || password != "") {
+            
             const data = { email, password }
             axios.post('login', data)
                 .then(res => {
@@ -97,14 +95,22 @@ function Login() {
                         // nếu có thì add vào database và rest cart trong context lại, và load lại giỏ hàng từ db
                         // xuống rồi add vào lại context
                         // Nếu không thì thì get cart từ db xuống
-                        //console.log("Data", res.data)
+                        console.log("Data", res.data.results.info)
                         //console.log("Thanh congggggggggg")
                         context.addUser(res.data.results.info)
                         //console.log("Token", res.data.results.token)
-                        localStorage.setItem('token', res.data.results.token);
-
-
-
+                        localStorage.setItem('token', res.data.results.token)
+                        localStorage.setItem('user_local', JSON.stringify({ email: email, password: password }))
+                        // localStorage.setItem('user_local', JSON.stringify({
+                        //     id: res.data.results.info.id,
+                        //     name: res.data.results.info.name,
+                        //     email: res.data.results.info.email,
+                        //     gender: res.data.results.info.gender,
+                        //     address: res.data.results.info.address,
+                        //     phone: res.data.results.info.phone,
+                        //     created_at: res.data.results.info.created_at,
+                        //     updated_ad: res.data.results.info.updated_ad,
+                        // }));
                         if (cart.length != 0) {
                             if (window.confirm("Bạn có muốn thêm các sản phẩm đã chọn trước đó vào giỏ hàng không. " + res.data.results.info.name)) {
                                 for (const [, value] of Object.entries(cart)) {
@@ -127,7 +133,6 @@ function Login() {
                                 context.resetCart(res.data.status)
                                 context.getCartuser()
                             }
-
                         }
                         else {
                             context.getCartuser()
@@ -139,8 +144,11 @@ function Login() {
                     Toast("Đăng nhập không thành công. Vui lòng thử lại mật khẩu hoặc email", "#f74747", 4000)
                     console.log("Err: ", err)
                 });
-        }else{
-            Toast("Vui lòng nhập đầy đủ thông tin", "#f74747", 4000)
+        } else {
+            if(email == "")
+                Toast("Vui lòng nhập Email", "#f74747", 4000)
+            else
+                Toast("Vui lòng nhập Password", "#f74747", 4000)
         }
     }
 
@@ -158,7 +166,9 @@ function Login() {
                     console.log("Log out hanh congggggggggg")
                     context.resetUser(res.data.status)
                     context.resetCart(res.data.status)
+                    // localStorage.clear()
                     localStorage.setItem('token', "")
+                    localStorage.setItem('user_local', "")
                     Toast("Đăng xuất thành công", "#f74747", 4000)
                     setEmail("")
                     setPassword("")
@@ -171,8 +181,49 @@ function Login() {
             });
     }
 
+    useEffect(() => {
+        // const data = JSON.parse(localStorage.getItem('user_local'))
+        // //console.log("dataa", data)
+        // const user = context.user
+        // if (data !== null && user.length === 0) {
+        //     if (data.email != "", data.password != "") {
+        //         const email_local = data.email
+        //         const password_local = data.password
+        //         //console.log("Da luu tai khoan| email: ", data.email," type: ", typeof(data.email) ," | password: ", data.password, " type: ", typeof(data.password))
+        //         {login(email_local, password_local)}
+        //     }
+        // }
+    })
 
-    if (user.length === 0) {
+    if (user.length !== 0) {
+        return (
+            <div className="right">
+                <div className="info">
+                    <h3>Thông tin chi tiết</h3>
+                    <div className="info-data">
+                        <div className="info-data-detail">
+                            <h4>Tên:</h4>
+                            <p >{user.name}</p>
+                        </div>
+                        <div className="info-data-detail">
+                            <h4>Email:</h4>
+                            <p>{user.email}</p>
+                        </div>
+                        <div className="info-data-detail">
+                            <h4>Giới tính:</h4>
+                            <p>{user.gender == 1 ? "Nam" : "Nữ"}</p>
+                        </div>
+                        <div className="info-data-detail">
+                            <h4>Địa chỉ:</h4>
+                            <p>{user.address}</p>
+                        </div>
+                        <button className="info-data-btn-logout" onClick={logout}>Đăng xuất</button>
+                    </div>
+                </div>
+            </div>
+        )
+    } else {
+
         return (
             <div className="container">
                 {isActive_login ? (
@@ -188,13 +239,13 @@ function Login() {
                                     onChange={(e) => setPassword(e.target.value)} className="formcontrol1" required />
                             </div>
                             <div className="btn-submit">
-                                <a className="btn-login" onClick={login}>ĐĂNG NHẬP</a>
+                                <a className="btn-login" onClick={() => login(email, password)}>ĐĂNG NHẬP</a>
                                 {/* <a className="btn-login" onClick={() => Toast("Đăng xuất thành công", "#f74747", 5000)}>ĐĂNG NHẬP</a> */}
                                 <a className="btn-forget-password" onClick={() => setShowForgot(!showForgot)}>Quên mật khẩu</a>
                             </div>
 
                         </form>
-                        <ForgotPassword showForgot={showForgot} setShowForgot={setShowForgot} email={email}/>
+                        <ForgotPassword showForgot={showForgot} setShowForgot={setShowForgot} email={email} />
 
                     </div>
                 ) : (
@@ -311,33 +362,7 @@ function Login() {
                 </div>
             </div>
         )
-    } else {
-        return (
-            <div className="right">
-                <div className="info">
-                    <h3>Thông tin chi tiết</h3>
-                    <div className="info-data">
-                        <div className="info-data-detail">
-                            <h4>Tên:</h4>
-                            <p >{user.name}</p>
-                        </div>
-                        <div className="info-data-detail">
-                            <h4>Email:</h4>
-                            <p>{user.email}</p>
-                        </div>
-                        <div className="info-data-detail">
-                            <h4>Giới tính:</h4>
-                            <p>{user.gender == 1 ? "Nam" : "Nữ"}</p>
-                        </div>
-                        <div className="info-data-detail">
-                            <h4>Địa chỉ:</h4>
-                            <p>{user.address}</p>
-                        </div>
-                        <button className="info-data-btn-logout" onClick={logout}>Đăng xuất</button>
-                    </div>
-                </div>
-            </div>
-        )
+
     }
 }
 

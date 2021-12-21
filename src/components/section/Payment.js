@@ -3,8 +3,9 @@ import { DataContext } from '../Context'
 import '../css/Payment.css'
 import Adress from './Adress';
 import axios from 'axios';
+import { Route, Redirect } from 'react-router-dom';
 
-import { Toast } from '../utils'
+import { Toast, getFormatVnPaySource, getFormatVnPay_DateSource } from '../utils'
 
 
 export class Payment extends Component {
@@ -19,8 +20,10 @@ export class Payment extends Component {
         shipping: "Giao hàng nhanh",
         //
         province: "",
-        districts:"",
-        wards:"",
+        districts: "",
+        wards: "",
+        check_vnpay: false,
+        url_vnpay: "",
 
     }
     componentDidMount() {
@@ -49,30 +52,28 @@ export class Payment extends Component {
         this.setState({ province: province })
     }
     setDistricts = (districts) => {
-        this.setState({districts: districts})
+        this.setState({ districts: districts })
     }
     setWards = (wards) => {
-        this.setState({wards: wards})
+        this.setState({ wards: wards })
     }
     add_Transaction() {
         const cart = this.context.cart
         const user = this.context.user
-        
+
         var user_name = this.state.user_name
         var user_email = this.state.user_email
-        if(user.length == 0){
-            
-            var user_address = this.state.user_address + ", "+ this.state.wards + ", "+ this.state.districts + ", " + this.state.province + "."
-        }else{
+        if (user.length == 0) {
+
+            var user_address = this.state.user_address + ", " + this.state.wards + ", " + this.state.districts + ", " + this.state.province + "."
+        } else {
             var user_address = this.state.user_address
         }
-        
         var user_phone = this.state.user_phone
         var amount = this.context.total
         var payment = this.state.payment
         var shipping = this.state.shipping
         var products = []
-        // 
         for (const [key, val] of Object.entries(cart)) {
             const temp = {}
 
@@ -95,54 +96,187 @@ export class Payment extends Component {
         const user = this.context.user
         const cart = this.context.cart
         console.log("data transaction: ", data)
-        if (user.length == 0) {
-            axios.post('/transaction', data)
-                .then(res => {
-                    if (res.data.status == "OK") {
-                        this.context.resetCart(res.data.status)
-                        //alert("Thanh toán thành công")
-                        Toast("Thanh toán thành công", "#3b741b", 4000)
-                        //console.log("post_transaction THANH CONG")
+        if (cart.length != 0) {
+            if (user.length == 0) {
+                axios.post('/transaction', data)
+                    .then(res => {
+                        // console.log("Anh thang gửi về  : ", res)
+                        if (res.data.status == "OK") {
+                            this.context.resetCart(res.data.status)
+                            //alert("Thanh toán thành công")
+                            //Toast("Thanh toán thành công", "#3b741b", 4000)
+                            const url_vnpay = res.data.results.vnp
+                            //console.log("url : ", res.data.results.vnp)
+                            //this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
+                            // console.log("....", url_vnpay)
+                            if (url_vnpay != null) {
+                                console.log("url : ", res.data.results.vnp)
+                                this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
+                            } else {
+                                this.clear_input()
+                                Toast("Thanh toán thành công", "#3b741b", 4000)
+                            }
 
-                    }
-                    //console.log("login:", res.data.results.info)
-                })
-                .catch(err => {
-                    //alert("Thanh toán thất bại")
-                    console.log("post_transaction THAT BAI", err)
-                    Toast("Thanh toán thất bại", "#f74747", 4000)
-                    //Toast("Thành công", "#3b741b", 4000)
-                });
-        }
-        else {
-            //Bearer như là cấp quyền truy cập cho người mang mã thông báo này
-            const authAxios = axios.create({
-                baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
-
-            });
-            authAxios.post('/transaction', data)
-                .then(res => {
-                    if (res.data.status == "OK") {
-                        for (const [key, val] of Object.entries(cart)) {
-                            this.context.delete_cartuser(val.id)
                         }
-                        this.context.resetCart(res.data.status)
-                        //console.log("post_transaction THANH CONG")
-                        //alert("Thanh toán thành công")
-                        Toast("Thanh toán thành công", "#3b741b", 4000)
-                    }
-                    //console.log("login:", res.data.results.info)
-                })
-                .catch(err => {
-                    alert("Thanh toán thất bại")
-                    console.log("post_transaction THAT BAI", err)
-                    Toast("Thanh toán thất bại", "#f74747", 4000)
+                    })
+                    .catch(err => {
+                        //Toast("Thanh toán thất bại", "#f74747", 4000)
+                        if (err.response.data.status == "NG") {
+                            //Toast("Thanh toán thất bại", "#f74747", 4000)
+                            //console.log("post_transaction", err.response.data.errors)
+                            const errors = err.response.data.errors
+                            for (const [key, val] of Object.entries(errors)) {
+                                if (key == "payment") {
+                                    Toast("Lựa chọn phương thức thanh toán", "#f74747", 4000)//#f57a7ado nhat
+                                }
+                                else if (key == "user_email") {
+                                    if (val == "The user email must be a valid email address.")
+                                        Toast("Email là một địa chỉ email hợp lệ", "#f74747", 4000)
+                                    else
+                                        Toast("Vui lòng nhập đúng Email", "#f74747", 4000)//#f57a7ado nhat
+                                }
+                                else if (key == "user_name") {
+                                    Toast("Nhập tên khách hàng", "#f74747", 4000)//#f57a7ado nhat
+                                }
+                                else if (key == "user_phone") {
+                                    //The user phone must be 10 digits.
+                                    if (val == "The user phone must be 10 digits.")
+                                        Toast("Số điện thoại phải có 10 chữ số", "#f74747", 4000)//#f57a7ado nhat
+                                    else
+                                        Toast("Vui lòng nhập số điện thoại", "#f74747", 4000)
+                                }
+                                //Toast(val, "#f74747", 4000)//#f57a7ado nhat
+                            }
+                        }
+                        //Toast("Thành công", "#3b741b", 4000)
+                    });
+            }
+            else {
+                //Bearer như là cấp quyền truy cập cho người mang mã thông báo này
+                const authAxios = axios.create({
+                    baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
 
                 });
+                authAxios.post('/transaction', data)
+                    .then(res => {
+                        console.log("post_transaction THANH CONG")
+                        if (res.data.status == "OK") {
+                            for (const [key, val] of Object.entries(cart)) {
+                                this.context.delete_cartuser(val.id)
+                            }
+                            this.context.resetCart(res.data.status)
+
+                            //alert("Thanh toán thành công")
+                            const url_vnpay = res.data.results.vnp
+                            console.log("url : ", res.data.results.vnp)
+                            this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
+                            if (url_vnpay != null) {
+                                //console.log("url : ", res.data.results.vnp)
+                                this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
+                            } else {
+                                this.clear_input()
+                                Toast("Thanh toán thành công", "#3b741b", 4000)
+                            }
+                        }
+                        //console.log("login:", res.data.results.info)
+                    })
+                    .catch(err => {
+                        // alert("Thanh toán thất bại")
+                        //console.log("post_transaction THAT BAI", err.response.data)
+                        Toast("Thanh toán thất bại", "#f74747", 4000)
+
+
+                    });
+            }
+        } else {
+            Toast("Vui lòng lựa chọn sản phẩm", "#f74747", 4400)
         }
+    }
+    check_order_online = () => {
+        fetch(window.location.href)
+            .then(response => {
+                const urll = response.url
+                if (getFormatVnPaySource(urll) == 1) {
+                    const time = getFormatVnPay_DateSource(urll)
+                    //vnp_ResponseCode=00
+                    //console.log("Đã thanh toán thanh công đơn hàng online")
+                    Toast(`Bạn đã thanh toán thanh công đơn hàng online. ${time}`, "#3b741b", 6000)
+                }
+                else if (getFormatVnPaySource(urll) == 0) {
+                    console.log("clear...")
+                }
+                else {
+                    Toast("Thanh toán không thành công nên đơn hàng của bạn đã bị HỦY.", "#f74747", 6000)
+                    const data = { vnp_TxnRef: getFormatVnPaySource(urll) }
+
+                    axios.get('/transaction/payment-return', { params: data })
+                        .then(res => {
+                            // console.log("Lỗi khi huy thanh toán online : ", res)
+                            if (res.data.status == "OK") {
+                                this.context.resetCart(res.data.status)
+                                //Toast("Thanh toán thành công", "#3b741b", 4000)
+
+
+                            }
+                        })
+                        .catch(err => {
+                            //Toast("Thanh toán thất bại", "#f74747", 4000)
+                        });
+                }
+            });
+    }
+    clear_input = () => {
+        this.setState({
+            user_name: "",
+            user_email: "",
+            user_address: "",
+            user_phone: "",
+            payment: "",
+            shipping: "Giao hàng nhanh",
+            //
+            province: "",
+            districts: "",
+            wards: "",
+            check_vnpay: false,
+            url_vnpay: ""
+        })
+    }
+    login_inPayment = (email, password) => {
+        const data = { email, password }
+        axios.post('login', data)
+            .then(res => {
+                if (res.data.status == "OK") {
+                    console.log("Data login in payment", res.data.results.info)
+                    //console.log("Thanh congggggggggg")
+                    this.context.addUser(res.data.results.info)
+                    //console.log("Token", res.data.results.token)
+                    localStorage.setItem('token', res.data.results.token)
+                    localStorage.setItem('user_local', JSON.stringify({ email: email, password: password }))
+                }
+            })
+            .catch((err) => {
+                console.log("Err login in payment", err)
+            });
+
+    }
+    check_login = (email, pass, token) => {
+        if (token != "" && email != "" && pass != "") {
+            this.login_inPayment(email, pass)
+        }
+    }
+    componentDidMount() {
+        this.check_order_online()
+        const token_user = localStorage.getItem('token')
+        if(token_user != ""){
+            const user_local = JSON.parse(localStorage.getItem('user_local'))
+            if(user_local.email != "" && user_local.password != ""){
+                this.check_login(user_local.email, user_local.password, token_user)
+            }
+        }
+        
     }
 
     render() {
@@ -157,16 +291,16 @@ export class Payment extends Component {
                     <form className="orderForm">
                         <h2>THÔNG TIN GIAO HÀNG</h2>
                         <div className="">
-                            <input type="text" className="form-control" placeholder="HỌ TÊN"
+                            <input type="text" className="form-control" placeholder="HỌ TÊN *"
                                 onChange={(e) => this.setName(e.target.value)} />
-                            <input type="text" className="form-control" placeholder="Số điện thoại"
+                            <input type="text" className="form-control" placeholder="Số điện thoại *"
                                 onChange={(e) => this.setPhone(e.target.value)} />
-                            <input type="text" className="form-control" placeholder="Email"
+                            <input type="text" className="form-control" placeholder="Email *"
                                 onChange={(e) => this.setEmail(e.target.value)} />
-                            <input type="text" className="form-control" placeholder="Địa chỉ"
+                            <input type="text" className="form-control" placeholder="Địa chỉ *"
                                 onChange={(e) => this.setAddress(e.target.value)} />
                             <Adress address={this.state.user_address} callBacksetProvince={this.setProvince}
-                                    callBacksetDistricts={this.setDistricts} callBacksetWards={this.setWards}/>
+                                callBacksetDistricts={this.setDistricts} callBacksetWards={this.setWards} />
                         </div>
                         <h2>PHƯƠNG THỨC GIAO HÀNG</h2>
                         <div>
@@ -181,15 +315,15 @@ export class Payment extends Component {
                             /> Thanh toán trực tiếp khi giao hàng
                         </div>
                         <div className="row-radio-tt">
-                            <input type="radio" name="gender" id="payment-mastercart" value="Thanh toán bằng thẻ quốc tế và nội địa (ATM)"
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán trực tuyến"
                                 onChange={(e) => this.setPayment(e.target.value)}
-                            /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
+                            /> Thanh toán trực tuyến
                         </div>
-                        <div className="row-radio-tt">
-                            <input type="radio" name="gender" id="payment-momo" value="Thanh toán bằng ví MoMo"
+                        {/* <div className="row-radio-tt">
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng ví MoMo"
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán bằng ví MoMo
-                        </div>
+                        </div> */}
                     </form>
                     <div className="your-order">
                         <h2>ĐƠN HÀNG</h2>
@@ -226,6 +360,20 @@ export class Payment extends Component {
                             >HOÀN TẤT ĐẶT HÀNG</button>
                         </div>
                     </div>
+                    {
+                        this.state.check_vnpay ?
+                            // <Route component={() => {
+                            //     window.location.href = this.state.url_vnpay
+                            // }}
+                            <Redirect to={{
+                                //pathname: "/payment",
+
+                                //search: window.location.href=this.state.url_vnpay,}}
+                                search: window.location.assign(this.state.url_vnpay)
+                            }}
+                            //state: { referrer: currentLocation }
+                            /> : null
+                    }
 
                 </div>
             )
@@ -261,15 +409,15 @@ export class Payment extends Component {
                             /> Thanh toán trực tiếp khi giao hàng
                         </div>
                         <div className="row-radio-tt">
-                            <input type="radio" name="gender" className="dbt" value="Thanh toán bằng thẻ quốc tế và nội địa (ATM)"
+                            <input type="radio" name="gender" className="dbt" value="Thanh toán trực tuyến"
                                 onChange={(e) => this.setPayment(e.target.value)}
-                            /> Thanh toán bằng thẻ quốc tế và nội địa (ATM)
+                            /> Thanh toán trực tuyến
                         </div>
-                        <div className="row-radio-tt">
+                        {/* <div className="row-radio-tt">
                             <input type="radio" name="gender" className="dbt" value="Thanh toán bằng ví MoMo"
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán bằng ví MoMo
-                        </div>
+                        </div> */}
                     </form>
                     <div className="your-order">
                         <h2>ĐƠN HÀNG</h2>
@@ -306,6 +454,20 @@ export class Payment extends Component {
                             >HOÀN TẤT ĐẶT HÀNG</button>
                         </div>
                     </div>
+                    {
+                        this.state.check_vnpay ?
+                            // <Route component={() => {
+                            //     window.location.href = this.state.url_vnpay
+                            // }}
+                            <Redirect to={{
+                                //pathname: "/payment",
+
+                                //search: window.location.href=this.state.url_vnpay,}}
+                                search: window.location.assign(this.state.url_vnpay)
+                            }}
+                            //state: { referrer: currentLocation }
+                            /> : null
+                    }
 
                 </div>
             )

@@ -60,7 +60,7 @@ function index(props) {
                             <div className="forgot-password-form">
                                 <p>Nhập địa chỉ Email*</p>
                                 <input type="email" id="forgot-password-email" className="forgot-password-input"
-                                    value="" onChange={(e) => setEmail(e.target.value)} />
+                                    onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className="forgot-password-form-password">
                                 <div className="forgot-password-form">

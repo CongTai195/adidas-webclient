@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { add_src_http, cutUrlinSpecification, getFormatImageSource, getImageListByString} from './utils'
+import { Toast, cutUrlinSpecification, getFormatImageSource, getImageListByString} from './utils'
 
 export const DataContext = React.createContext();
 
@@ -157,7 +157,7 @@ export class DataProvider extends Component {
         });
         authAxios.get('/cart')
             .then(res => {
-                console.log("detail cart: ", res.data.results)
+                //console.log("detail cart: ", res.data.results)
                 const cart_user = res.data.results
                 //Tìm trong list products có id == với prduct_id của cartuser rồi lấy các key tương ứng qua bỏ vào giỏ hàng
                 for (const [key, value] of Object.entries(cart_user)) {
@@ -182,7 +182,7 @@ export class DataProvider extends Component {
                             }
                         }
                     }
-                    console.log("cartuser: ", value)
+                    //console.log("cartuser: ", value)
                     this.setState(i => ({
                         cart: [...i.cart, value]
                     }))
@@ -204,30 +204,27 @@ export class DataProvider extends Component {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
         });
-        console.log("cart data: ", data)
+        //console.log("cart data: ", data)
         authAxios.post('/cart', data)
             .then(res => {
                 if (res.data.status == "OK") {
 
                     console.log("post_cart THANH CONG")
+                    Toast("Thêm vào giỏ thành công", "#3b741b", 4000)
                 }
                 //console.log("login:", res.data.results.info)
             })
+            //{"status":"NG","errors":{"jwt_mdlw_error":"Unauthenticated."}}
             .catch(err => {
-
-                console.log("post_cart THAT BAI")
+                if(err.response.data.status == "NG"){
+                    Toast("Thêm vào giỏ không thành công", "#f74747", 4000)
+                }
+                //console.log("post_cart THAT BAI")
             });
     }
     addCart = (id, size, quantity) => {
         const { products, cart } = this.state;
         const user = this.state.user;
-        //const selec_size = this.state.selectd_size;
-        //const selec_quantity = this.state.selectd_quantity;
-
-        // const check = cart.every(item => {
-        //     return item._id !== id
-
-        // })
         if (size != 0 && quantity != 0) {
             const data1 = products.filter(products => {
                 return products.id == id
@@ -274,19 +271,9 @@ export class DataProvider extends Component {
             }
 
         } else {
-            alert("Vui lòng chọn đầy đủ Size và Số lượng!")
+            //alert("Vui lòng chọn đầy đủ Size và Số lượng!")
+            Toast("Vui lòng chọn đầy đủ Size và Số lượng!", "#f74747", 4000)
         }
-        // if(check){
-        //     const data = products.filter(products =>{
-        //         return products._id === id
-        //     })
-        //     this.setState({cart: [...cart, ...data]})
-
-
-        //     console.log(data)
-        // }else{
-        //     alert("Đã có trong giỏ hàng!")
-        // }
 
     };
     resetCart = (string) => {

@@ -39,53 +39,72 @@ function Login() {
     // ---------------------switch to forgot password-----------------
     const [showForgot, setShowForgot] = useState(false)
 
-    function register() {
-        if (name_regis != "" || email_regis != "" || password_regis != "" ||
-            address_regis != "" || phone_regis != "") {
-            if (phone_regis.length == 10) {
-                const name = name_regis;
-                const email = email_regis;
-                const password = password_regis;
-                const gender = gender_regis;
-                const address = address_regis;
-                const phone = phone_regis;
 
-                const data = { name, email, password, gender, address, phone }
-                axios.post('register', data)
-                    .then(res => {
-                        if (res.data.status == "OK") {
-                            console.log("resgister: ", res.data.results)
-                            setId_Verify(res.data.results.id)
-                            setShow_Verify(!show_Verify)
-                            //alert("Tạo thành công")
-                            Toast("Tạo thành công", "#3b741b", 4000)
+    function register() {
+        // if (name_regis != "" || email_regis != "" || password_regis != "" ||
+        //     address_regis != "" || phone_regis != "") {
+        //     if (phone_regis.length == 10) {
+        const name = name_regis;
+        const email = email_regis;
+        const password = password_regis;
+        const gender = gender_regis;
+        const address = address_regis;
+        const phone = phone_regis;
+
+        const data = { name, email, password, gender, address, phone }
+        axios.post('register', data)
+            .then(res => {
+                if (res.data.status == "OK") {
+                    console.log("resgister: ", res.data.results)
+                    setId_Verify(res.data.results.id)
+                    setShow_Verify(!show_Verify)
+                    Toast("Tạo thành công", "#3b741b", 4000)
+                }
+            })
+            .catch(err => {
+                if (err.response.data.status == "NG") {
+                    const errors = err.response.data.errors
+
+                    for (const [key, val] of Object.entries(errors)) {
+                        if (key == "name") {
+                            var element = document.getElementById("id-name-register")
+                                element.setAttribute("style", "border: 2px solid #e70f0f;")
                         }
-                    })
-                    .catch(err => {
-                        // alert("Tạo không thành công")
-                        Toast("Tạo không thành công", "#f74747", 4000)
-                        //console.log("Err: ", err.response)
-                        // if(err.response.data.status == "NG"){
-                        //     console.log("register", err.response.data.errors)
-                        //     const errors = err.response.data.errors
-                        // }
-                    });
-            }
-            else {
-                // alert("Vui lòng nhập đúng số điện thoại")
-                Toast("Vui lòng nhập đúng số điện thoại", "#f74747", 4000)
-            }
-        } else {
-            // alert("Vui lòng nhập đầy đủ thông tin")
-            Toast("Vui lòng nhập đầy đủ thông tin", "#f74747", 4000)
-        }
+                        else if (key == "phone") {
+                            if (val == "The phone must be 10 digits.") {
+                                Toast("Số điện thoại đủ chữ 10 số", "#f74747", 4000)
+                                var element = document.getElementById("id-email-register")
+                                element.setAttribute("style", "border: 2px solid #e70f0f;")
+                            }
+                            else {
+                                var element = document.getElementById("id-phone-register")
+                                element.setAttribute("style", "border: 2px solid #e70f0f;")
+                            }
+                        }
+                        else if (key == "address") {
+                            var element = document.getElementById("id-address-register")
+                            element.setAttribute("style", "border: 2px solid #e70f0f;")
+                        }
+                        else if (key == "email") {
+                            Toast("Email là một địa chỉ email hợp lệ", "#f74747", 4000)
+                            var element = document.getElementById("id-email-register")
+                            element.setAttribute("style", "border: 2px solid #e70f0f;")
+                        }
+                        else if (key == "password") {
+                            var element = document.getElementById("id-password-register")
+                            element.setAttribute("style", "border: 2px solid #e70f0f;")
+                        }
+                    }
+                }
+
+            });
 
 
     }
 
     const login = (email, password) => {
         if (email != "" || password != "") {
-            
+
             const data = { email, password }
             axios.post('login', data)
                 .then(res => {
@@ -145,7 +164,7 @@ function Login() {
                     console.log("Err: ", err)
                 });
         } else {
-            if(email == "")
+            if (email == "")
                 Toast("Vui lòng nhập Email", "#f74747", 4000)
             else
                 Toast("Vui lòng nhập Password", "#f74747", 4000)
@@ -169,7 +188,7 @@ function Login() {
                     // localStorage.clear()
                     localStorage.setItem('token', "")
                     localStorage.setItem('user_local', "")
-                    Toast("Đăng xuất thành công", "#f74747", 4000)
+                    Toast("Đăng xuất thành công", "#3b741b", 4000)
                     setEmail("")
                     setPassword("")
                 }
@@ -268,7 +287,8 @@ function Login() {
                                 <div className="user-register">
                                     <div className="input-box">
                                         <span className="label-text-register">Họ và tên</span>
-                                        <input type="text" placeholder="Nhập họ tên" className="form-register-control"
+                                        <input id="id-name-register" type="text" placeholder="Nhập họ tên" className="form-register-control"
+                                            style={name_regis != "" ? {border: '2px solid rgb(44, 42, 42)'} : null}
                                             onChange={(e) => setName_regis(e.target.value)}
                                         />
                                     </div>
@@ -277,7 +297,8 @@ function Login() {
                                 <div className="user-register">
                                     <div className="input-box">
                                         <span className="label-text-register">Số điện thoại</span>
-                                        <input type="text" placeholder="Nhập số điện thoại" className="form-register-control"
+                                        <input id="id-phone-register" type="text" placeholder="Nhập số điện thoại" className="form-register-control"
+                                            style={phone_regis != "" ? {border: '2px solid rgb(44, 42, 42)'} : null}
                                             onChange={(e) => setPhone_regis(e.target.value)}
                                         />
                                     </div>
@@ -296,7 +317,8 @@ function Login() {
                                 <div className="user-register">
                                     <div className="input-box">
                                         <span className="label-text-register">Địa chỉ</span>
-                                        <input type="text" placeholder="Nhập địa chỉ" className="form-register-control"
+                                        <input id="id-address-register" type="text" placeholder="Nhập địa chỉ" className="form-register-control"
+                                            style={address_regis != "" ? {border: '2px solid rgb(44, 42, 42)'} : null}
                                             onChange={(e) => setAddress_regis(e.target.value)}
                                         />
                                     </div>
@@ -304,7 +326,8 @@ function Login() {
                                 <div className="user-register">
                                     <div className="input-box">
                                         <span className="label-text-register">Chi tiết đăng nhập</span>
-                                        <input type="text" placeholder="Nhập email" className="form-register-control"
+                                        <input id="id-email-register" type="text" placeholder="Nhập email" className="form-register-control"
+                                            style={email_regis != "" ? {border: '2px solid rgb(44, 42, 42)'} : null}
                                             onChange={(e) => setEmail_regis(e.target.value)}
                                         />
                                     </div>
@@ -312,7 +335,8 @@ function Login() {
                                 <div className="user-register">
                                     <div className="input-box">
                                         <span className="label-text-register">Password</span>
-                                        <input type="text" placeholder="Nhập nhật khẩu" className="form-register-control"
+                                        <input id="id-password-register" type="password" placeholder="Nhập nhật khẩu" className="form-register-control"
+                                            style={password_regis != "" ? {border: '2px solid rgb(44, 42, 42)'} : null}
                                             onChange={(e) => setPassword_regis(e.target.value)}
                                         />
                                     </div>

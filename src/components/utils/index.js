@@ -98,6 +98,21 @@ const pri_cutUrlinImage_list = (string) => {
     }
     return list_index
 }
+export const cutUrlinImage_list = (string) => {
+    var list_index = []
+    var temp = string
+    while (true) {
+        var len = temp.length;
+        var a = 0
+        var b = temp.search(".jpg")
+        if (b == -1) {
+            break;
+        }
+        list_index.push(temp.slice(a, b + 4))
+        temp = temp.slice(b + 5, len)
+    }
+    return list_index
+}
 const pri_getFormatImageSource = (imageSource) => {
     let customImageSource = imageSource.trim();
 
@@ -130,8 +145,19 @@ export const getFormatVnPaySource = (vnpaySource) => {
 }
 export const getFormatVnPay_DateSource = (vnpaySource) => {
     let customImageSource = vnpaySource.trim();
-    customImageSource.search('vnp_PayDate');
+    customImageSource.search('vnp_PayDate');//date_pay.slice(8, 10) + ":" + date_pay.slice(10, 12)
     let date_pay = customImageSource.slice((customImageSource.search('vnp_PayDate') + 12), (customImageSource.search('vnp_PayDate') + 12 + 14))
-    let string_date = "Vào lúc " + date_pay.slice(10, 12) + ":" + date_pay.slice(8, 10) + " ngày " + date_pay.slice(6, 8) + "/" + date_pay.slice(4, 6) + "/" + date_pay.slice(0, 4)
+    let string_date = "Vào lúc " + pri_train_datetime(date_pay.slice(8, 10), date_pay.slice(10, 12)) + " |" + " ngày " + date_pay.slice(6, 8) + "/" + date_pay.slice(4, 6) + "/" + date_pay.slice(0, 4)
     return string_date
+}
+const pri_train_datetime = (hour, minute) => {
+    let val = ""
+    let hour_temp = parseInt(hour)
+    let minute_temp = parseInt(minute)
+    if (hour_temp - 12 < 0) {
+        val = hour + ":" + minute + " AM"
+    } else {
+        val = hour + ":" + minute + " PM"
+    }
+    return val
 }

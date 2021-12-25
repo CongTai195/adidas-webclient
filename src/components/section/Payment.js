@@ -24,6 +24,7 @@ export class Payment extends Component {
         wards: "",
         check_vnpay: false,
         url_vnpay: "",
+        check_vali_input: {},
 
     }
     componentDidMount() {
@@ -96,58 +97,71 @@ export class Payment extends Component {
         const user = this.context.user
         const cart = this.context.cart
         console.log("data transaction: ", data)
+        
         if (cart.length != 0) {
             if (user.length == 0) {
                 axios.post('/transaction', data)
                     .then(res => {
-                        // console.log("Anh thang gửi về  : ", res)
                         if (res.data.status == "OK") {
                             this.context.resetCart(res.data.status)
-                            //alert("Thanh toán thành công")
-                            //Toast("Thanh toán thành công", "#3b741b", 4000)
                             const url_vnpay = res.data.results.vnp
-                            //console.log("url : ", res.data.results.vnp)
-                            //this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
-                            // console.log("....", url_vnpay)
                             if (url_vnpay != null) {
-                                console.log("url : ", res.data.results.vnp)
+                                //console.log("url : ", res.data.results.vnp)
                                 this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
                             } else {
                                 this.clear_input()
                                 Toast("Thanh toán thành công", "#3b741b", 4000)
                             }
-
                         }
                     })
                     .catch(err => {
                         //Toast("Thanh toán thất bại", "#f74747", 4000)
+                        
                         if (err.response.data.status == "NG") {
                             //Toast("Thanh toán thất bại", "#f74747", 4000)
                             //console.log("post_transaction", err.response.data.errors)
+                            const check_vali_arr = {}
                             const errors = err.response.data.errors
+                            
                             for (const [key, val] of Object.entries(errors)) {
                                 if (key == "payment") {
+                                    //check_vali_arr[key] = ""
+                                    //console.log("check validate 11: ", {[key]: ""})
                                     Toast("Lựa chọn phương thức thanh toán", "#f74747", 4000)//#f57a7ado nhat
                                 }
                                 else if (key == "user_email") {
-                                    if (val == "The user email must be a valid email address.")
+                                    if (val == "The user email must be a valid email address."){
+                                        //check_vali_arr[key] = "valid email address"
                                         Toast("Email là một địa chỉ email hợp lệ", "#f74747", 4000)
-                                    else
-                                        Toast("Vui lòng nhập đúng Email", "#f74747", 4000)//#f57a7ado nhat
+                                    }
+                                    else{
+                                        check_vali_arr[key] = ""
+                                        //Toast("Vui lòng nhập địa Email", "#f74747", 4000)//#f57a7ado nhat
+                                    }
                                 }
                                 else if (key == "user_name") {
-                                    Toast("Nhập tên khách hàng", "#f74747", 4000)//#f57a7ado nhat
+                                    
+                                    check_vali_arr[key] = ""
+                                    //Toast("Nhập tên khách hàng", "#f74747", 4000)//#f57a7ado nhat
                                 }
                                 else if (key == "user_phone") {
                                     //The user phone must be 10 digits.
-                                    if (val == "The user phone must be 10 digits.")
+                                    if (val == "The user phone must be 10 digits."){
+                                        //check_vali_arr[key] = "10 digits"
                                         Toast("Số điện thoại phải có 10 chữ số", "#f74747", 4000)//#f57a7ado nhat
-                                    else
-                                        Toast("Vui lòng nhập số điện thoại", "#f74747", 4000)
+                                    }   
+                                    else{
+                                        check_vali_arr[key] = ""
+                                        //Toast("Vui lòng nhập số điện thoại", "#f74747", 4000)
+                                    }  
                                 }
                                 //Toast(val, "#f74747", 4000)//#f57a7ado nhat
                             }
+                            if(Object.keys(check_vali_arr).length != 0){
+                                this.setState({check_vali_input: check_vali_arr})
+                            }
                         }
+                        
                         //Toast("Thành công", "#3b741b", 4000)
                     });
             }
@@ -252,6 +266,7 @@ export class Payment extends Component {
                     console.log("Data login in payment", res.data.results.info)
                     //console.log("Thanh congggggggggg")
                     this.context.addUser(res.data.results.info)
+
                     //console.log("Token", res.data.results.token)
                     localStorage.setItem('token', res.data.results.token)
                     localStorage.setItem('user_local', JSON.stringify({ email: email, password: password }))
@@ -284,18 +299,21 @@ export class Payment extends Component {
         // console.log(".....", this.state.province)
 
         //const total = this.context.total;
-        // console.log("Address payment: ", this.state.user_address)
+        //console.log("Check vali array....", this.state.check_vali_input)
         if (user.length === 0) {
             return (
                 <div className="payment">
                     <form className="orderForm">
                         <h2>THÔNG TIN GIAO HÀNG</h2>
                         <div className="">
-                            <input type="text" className="form-control" placeholder="HỌ TÊN *"
+                            <input type="text" className="form-control" placeholder="HỌ TÊN *" 
+                                style={(this.state.check_vali_input).length == 0 ? null : (this.state.check_vali_input)['user_name'] == "" ? {border: '1px solid #e70f0f'} : null}
                                 onChange={(e) => this.setName(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Số điện thoại *"
+                                style={(this.state.check_vali_input).length == 0 ? null : (this.state.check_vali_input)['user_phone'] == "" ? {border: '1px solid #e70f0f'} : null}
                                 onChange={(e) => this.setPhone(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Email *"
+                                style={(this.state.check_vali_input).length == 0 ? null : (this.state.check_vali_input)['user_email'] == "" ? {border: '1px solid #e70f0f'} : null}
                                 onChange={(e) => this.setEmail(e.target.value)} />
                             <input type="text" className="form-control" placeholder="Địa chỉ *"
                                 onChange={(e) => this.setAddress(e.target.value)} />
@@ -311,6 +329,7 @@ export class Payment extends Component {
                         <h2>PHƯƠNG THỨC THANH TOÁN</h2>
                         <div className="row-radio-tt">
                             <input type="radio" name="gender" id="payment-direct" value="Thanh toán trực tiếp khi giao hàng"
+                                style={{color: 'red'}}
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán trực tiếp khi giao hàng
                         </div>

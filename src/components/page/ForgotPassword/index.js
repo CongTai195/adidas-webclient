@@ -75,7 +75,7 @@ function index(props) {
                             <div className="forgot-password-btn">
                                 <button className="forgot-password-btn-submit" onClick={() => submit_forgot(getEmail, getPassword, getConfirmPassword)}>Xác nhận</button>
                             </div>
-                            <p className="close-forgot" onClick={() => props.setShowForgot(!showForgot)}>X</p>
+                            {/* <p className="close-forgot" onClick={() => props.setShowForgot(!showForgot)}>X</p> */}
                         </div>
                         <Verify id={getIdUser_Verify} showVerify={show_Verify} setIdUser_Verify={setIdUser_Verify}
                             setShow_Verify={setShow_Verify} setIsActive_login={setIsActive_login} setIsActive_register={setIsActive_register} />

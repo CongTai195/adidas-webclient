@@ -117,7 +117,9 @@ const pri_getFormatImageSource = (imageSource) => {
     let customImageSource = imageSource.trim();
 
     if (!customImageSource.startsWith('http')) {
-        customImageSource = `http://127.0.0.1:8000/${customImageSource}`
+        customImageSource = `https://shop-adidas.herokuapp.com/${customImageSource}`
+        //http://127.0.0.1:8000/
+        //http://127.0.0.1:8000/product/36/chup-anh-giay-dep (1).jpg
     }
 
     return customImageSource;
@@ -157,7 +159,7 @@ const pri_train_datetime = (hour, minute) => {
     if (hour_temp - 12 < 0) {
         val = hour + ":" + minute + " AM"
     } else {
-        val = hour + ":" + minute + " PM"
+        val = hour_temp - 12 + ":" + minute + " PM"
     }
     return val
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import Slider from 'react-slick';
+import { cutUrlinImage_list } from '../utils'
 
 function Image_Slider(props) {
     const string_image = props.list_image
-    const image_list = cutUrl(string_image)
+    const image_list = cutUrlinImage_list(string_image)
     const imageCallback = props.imageCallback
     var settings = {
         dots: true,
@@ -13,21 +14,6 @@ function Image_Slider(props) {
         slidesToScroll: 1,
         color: "black",
     };
-    function cutUrl(string) {
-        var list_index = []
-        var temp = string
-        while (true) {
-            var len = temp.length;
-            var a = 0
-            var b = temp.search(".jpg")
-            if (b == -1) {
-                break;
-            }
-            list_index.push(temp.slice(a, b + 4))
-            temp = temp.slice(b + 5, len)
-        }
-        return list_index
-    }
 
     return (
         <div className="image-slider-container">

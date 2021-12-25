@@ -83,8 +83,41 @@ export class Check_order extends Component {
         const show = this.state.showRating
         this.setState({ showRating: !show })
     }
-    //
+    //---------------------------------------
+    //------------------check login -------------
+    login_inPayment = (email, password) => {
+        const data = { email, password }
+        axios.post('login', data)
+            .then(res => {
+                if (res.data.status == "OK") {
+                    console.log("Data login in payment", res.data.results.info)
+                    //console.log("Thanh congggggggggg")
+                    this.context.addUser(res.data.results.info)
+                    //console.log("Token", res.data.results.token)
+                    localStorage.setItem('token', res.data.results.token)
+                    localStorage.setItem('user_local', JSON.stringify({ email: email, password: password }))
+                }
+            })
+            .catch((err) => {
+                console.log("Err login in payment", err)
+            });
+
+    }
+    check_login = (email, pass, token) => {
+        if (token != "" && email != "" && pass != "") {
+            this.login_inPayment(email, pass)
+        }
+    }
+    //--------------------------------------
+
     componentDidMount() {
+        const token_user = localStorage.getItem('token')
+        if(token_user != ""){
+            const user_local = JSON.parse(localStorage.getItem('user_local'))
+            if(user_local.email != "" && user_local.password != ""){
+                this.check_login(user_local.email, user_local.password, token_user)
+            }
+        }
         this.getListTransaction()
     }
 

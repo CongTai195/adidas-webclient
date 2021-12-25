@@ -4,11 +4,12 @@
     flex-wrap: wrap;
     align-content: center;
     justify-content: center;
-    margin:  50px 0;
+
     margin-left: 5px;
 }
 .details-images-products{
     flex-direction: column;
+    margin-top: 20px;
 }
 /* -----------Slider--------- */
 .details-images-products .image-slider-container{
@@ -50,7 +51,7 @@
     max-width: 600px;
     min-width: 290px;
     margin-left: 20px;
-    
+    margin-top: 20px;
     
 }
 .box .row{
@@ -233,6 +234,7 @@
     max-width: 620px;
     min-width: 600px;
     padding: 25px;
+    margin: 25px;
     border: 1px solid #494949;
 }
 .detail-user-commentfor-products-row{
@@ -270,6 +272,12 @@
     max-width: 600px;
     margin-top: 40px;
 }
+.detail-size-chart-label{
+    font-size: 22px;
+    margin-left: 5px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
 .detail-size-chart .detail-size-chart-img{
     float: right;
     max-width: 420px;
@@ -277,5 +285,6 @@
     width: 100%;
     display: block;
     object-fit: cover;
+    margin-right: 70px;
     margin-bottom: 20px;
 }

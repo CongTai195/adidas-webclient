@@ -277,7 +277,7 @@ export class Details extends Component {
                                     <button onClick={() => { this.context.addCart(product.id, this.state.select_size, this.state.select_quantity) }}>Thêm vào giỏ</button>
                                 </div>
                                 <div className="detail-size-chart">
-                                    <h3 className="detail-size-chart-label">Cách chọn size giày</h3>
+                                    <div className="detail-size-chart-label">Cách chọn size giày</div>
                                     <img className="detail-size-chart-img" src={Image_SizeChart} alt="" />
                                 </div>
                                 {/* <Link onClick={() => this.context.addCart(product._id)} to="/cart" className="cart">

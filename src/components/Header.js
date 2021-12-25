@@ -5,6 +5,7 @@ import Logo from './img/bieu-tuong-adidas.jpg'
 import { Link } from "react-router-dom";
 import { DataContext } from './Context'
 import List_products from "./section/List_products";
+import Sider_Notify from '../components/page/Slider_Notify'
 import './css/Header.css'
 import axios from 'axios';
 
@@ -39,10 +40,15 @@ export class Header extends Component {
         const products = this.context.products
         // console.log("Here: ", products)
         let matches = []
-        matches = products.filter(state => {
-            const regex = new RegExp(`${search}`, "gi")//gi: khong phan biet chu hoa va thuong
-            return state.name.match(regex);//|| state.description.match(regex) || state.specifications.match(regex)
-        });
+        try {
+            matches = products.filter(state => {
+                const regex = new RegExp(`${search}`, "gi")//gi: khong phan biet chu hoa va thuong
+                return state.name.match(regex);//|| state.description.match(regex) || state.specifications.match(regex)
+            });
+        }
+        catch (er){
+            
+        }
         //console.log("Here: ", matches)
 
         this.setState({ search: matches })
@@ -182,7 +188,6 @@ export class Header extends Component {
                                                         <Link to={"/category/" + subs.id}>{subs.name}</Link>
                                                     </li>
                                                 ))
-
                                             }
                                         </ul>
                                     </div>
@@ -231,6 +236,11 @@ export class Header extends Component {
                                 />
                             </div>
                             {this.state.search && <List_products search_autocomplete={this.state.search} />}
+                        </div>
+                    </div>
+                    <div className="title-new-context">
+                        <div className="title-new-context-container">
+                            {/* <Sider_Notify /> */}
                         </div>
                     </div>
                 </div>

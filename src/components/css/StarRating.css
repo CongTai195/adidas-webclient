@@ -3,12 +3,11 @@
     height: 100%;
     right: 0px;
     top: 0px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(72, 71, 71, 0.8);
     position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 .star-rating{
     width: 400px;

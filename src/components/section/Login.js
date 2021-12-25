@@ -343,7 +343,7 @@ function Login() {
                                 </div>
                                 <a className="btn-register" onClick={register}>ĐĂNG KÝ</a>
                             </form>
-                            <Verify id={id_Verify} showVerify={show_Verify} setShow_Verify={setShow_Verify} setIsActive_login={setIsActive_login} setIsActive_register={setIsActive_register} />
+                            <Verify id={id_Verify} showVerify={show_Verify} setShow_Verify={setShow_Verify} setIsActive_login={setIsActive_login} setIsActive_register={setIsActive_register} setShowForgot={setShowForgot}/>
                         </div>
                     ) : (
                         <div className="title-register-2">

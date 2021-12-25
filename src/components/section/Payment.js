@@ -24,7 +24,7 @@ export class Payment extends Component {
         wards: "",
         check_vnpay: false,
         url_vnpay: "",
-        check_vali_input: {},
+        //check_vali_input: {},
 
     }
     componentDidMount() {
@@ -97,7 +97,7 @@ export class Payment extends Component {
         const user = this.context.user
         const cart = this.context.cart
         console.log("data transaction: ", data)
-        
+
         if (cart.length != 0) {
             if (user.length == 0) {
                 axios.post('/transaction', data)
@@ -116,95 +116,113 @@ export class Payment extends Component {
                     })
                     .catch(err => {
                         //Toast("Thanh toán thất bại", "#f74747", 4000)
-                        
+
                         if (err.response.data.status == "NG") {
                             //Toast("Thanh toán thất bại", "#f74747", 4000)
                             //console.log("post_transaction", err.response.data.errors)
                             const check_vali_arr = {}
                             const errors = err.response.data.errors
-                            
+
                             for (const [key, val] of Object.entries(errors)) {
                                 if (key == "payment") {
-                                    //check_vali_arr[key] = ""
-                                    //console.log("check validate 11: ", {[key]: ""})
                                     Toast("Lựa chọn phương thức thanh toán", "#f74747", 4000)//#f57a7ado nhat
                                 }
                                 else if (key == "user_email") {
-                                    if (val == "The user email must be a valid email address."){
+                                    if (val == "The user email must be a valid email address.") {
                                         //check_vali_arr[key] = "valid email address"
                                         Toast("Email là một địa chỉ email hợp lệ", "#f74747", 4000)
                                     }
-                                    else{
-                                        check_vali_arr[key] = ""
+                                    else {
+                                        var element = document.getElementById("id-email-payment")
+                                        element.setAttribute("style", "border: 2px solid #e70f0f;")
+                                        //check_vali_arr[key] = ""
                                         //Toast("Vui lòng nhập địa Email", "#f74747", 4000)//#f57a7ado nhat
                                     }
                                 }
                                 else if (key == "user_name") {
-                                    
-                                    check_vali_arr[key] = ""
+                                    var element = document.getElementById("id-name-payment")
+                                    element.setAttribute("style", "border: 2px solid #e70f0f;")
+                                    //check_vali_arr[key] = ""
                                     //Toast("Nhập tên khách hàng", "#f74747", 4000)//#f57a7ado nhat
                                 }
                                 else if (key == "user_phone") {
                                     //The user phone must be 10 digits.
-                                    if (val == "The user phone must be 10 digits."){
-                                        //check_vali_arr[key] = "10 digits"
+                                    if (val == "The user phone must be 10 digits.") {
+                                        var element = document.getElementById("id-phone-payment")
+                                        element.setAttribute("style", "border: 2px solid #e70f0f;")
                                         Toast("Số điện thoại phải có 10 chữ số", "#f74747", 4000)//#f57a7ado nhat
-                                    }   
-                                    else{
-                                        check_vali_arr[key] = ""
-                                        //Toast("Vui lòng nhập số điện thoại", "#f74747", 4000)
-                                    }  
+                                    }
+                                    else {
+                                        var element = document.getElementById("id-phone-payment")
+                                        element.setAttribute("style", "border: 2px solid #e70f0f;")
+                                    }
                                 }
-                                //Toast(val, "#f74747", 4000)//#f57a7ado nhat
-                            }
-                            if(Object.keys(check_vali_arr).length != 0){
-                                this.setState({check_vali_input: check_vali_arr})
                             }
                         }
-                        
+
                         //Toast("Thành công", "#3b741b", 4000)
                     });
             }
             else {
                 //Bearer như là cấp quyền truy cập cho người mang mã thông báo này
-                const authAxios = axios.create({
-                    baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    },
-
-                });
-                authAxios.post('/transaction', data)
-                    .then(res => {
-                        console.log("post_transaction THANH CONG")
-                        if (res.data.status == "OK") {
-                            for (const [key, val] of Object.entries(cart)) {
-                                this.context.delete_cartuser(val.id)
-                            }
-                            this.context.resetCart(res.data.status)
-
-                            //alert("Thanh toán thành công")
-                            const url_vnpay = res.data.results.vnp
-                            console.log("url : ", res.data.results.vnp)
-                            this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
-                            if (url_vnpay != null) {
-                                //console.log("url : ", res.data.results.vnp)
-                                this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
-                            } else {
-                                this.clear_input()
-                                Toast("Thanh toán thành công", "#3b741b", 4000)
-                            }
-                        }
-                        //console.log("login:", res.data.results.info)
-                    })
-                    .catch(err => {
-                        // alert("Thanh toán thất bại")
-                        //console.log("post_transaction THAT BAI", err.response.data)
-                        Toast("Thanh toán thất bại", "#f74747", 4000)
-
+                if (data['payment'] == 'Thanh toán trực tuyến') {
+                    const authAxios = axios.create({
+                        baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        },
 
                     });
+                    authAxios.post('/transaction', data)
+                        .then(res => {
+                            console.log("post_transaction THANH CONG", res.data)
+                            if (res.data.status == "OK") {
+                                for (const [key, val] of Object.entries(cart)) {
+                                    this.context.delete_cartuser(val.id)
+                                }
+                                this.context.resetCart(res.data.status)
+
+                                //alert("Thanh toán thành công")
+                                const url_vnpay = res.data.results.vnp
+                                console.log("url : ", res.data.results.vnp)
+                                this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
+                                if (url_vnpay != null) {
+                                    //console.log("url : ", res.data.results.vnp)
+                                    this.setState({ check_vnpay: !this.state.check_vnpay, url_vnpay: url_vnpay })
+                                } else {
+                                    this.clear_input()
+                                    Toast("Thanh toán thành công", "#3b741b", 4000)
+                                }
+                            }
+                        })
+                        .catch(err => {
+                            Toast("Thanh toán thất bại", "#f74747", 4000)
+                        });
+                } else { //Thanh toán khi nhận hàng
+                    const authAxios = axios.create({
+                        baseURL: axios.baseURL,//"https://shop-adidas.herokuapp.com/api/",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        },
+
+                    });
+                    authAxios.post('/transaction', data)
+                        .then(res => {
+                            console.log("post_transaction THANH CONG", res.data)
+                            if (res.data.status == "OK") {
+                                for (const [key, val] of Object.entries(cart)) {
+                                    this.context.delete_cartuser(val.id)
+                                }
+                                this.context.resetCart(res.data.status)
+                                Toast("Thanh toán thành công", "#3b741b", 4000)
+                            }
+                        })
+                        .catch(err => {
+                            Toast("Thanh toán thất bại", "#f74747", 4000)
+                        });
+                }
             }
+
         } else {
             Toast("Vui lòng lựa chọn sản phẩm", "#f74747", 4400)
         }
@@ -285,13 +303,13 @@ export class Payment extends Component {
     componentDidMount() {
         this.check_order_online()
         const token_user = localStorage.getItem('token')
-        if(token_user != ""){
+        if (token_user != "") {
             const user_local = JSON.parse(localStorage.getItem('user_local'))
-            if(user_local.email != "" && user_local.password != ""){
+            if (user_local.email != "" && user_local.password != "") {
                 this.check_login(user_local.email, user_local.password, token_user)
             }
         }
-        
+
     }
 
     render() {
@@ -306,16 +324,17 @@ export class Payment extends Component {
                     <form className="orderForm">
                         <h2>THÔNG TIN GIAO HÀNG</h2>
                         <div className="">
-                            <input type="text" className="form-control" placeholder="HỌ TÊN *" 
-                                style={(this.state.check_vali_input).length == 0 ? null : (this.state.check_vali_input)['user_name'] == "" ? {border: '1px solid #e70f0f'} : null}
+                            <input id="id-name-payment" type="text" className="form-control" placeholder="HỌ TÊN *"
+                                style={this.state.user_name != "" ? { border: '1px solid rgb(44, 42, 42)' } : null}
                                 onChange={(e) => this.setName(e.target.value)} />
-                            <input type="text" className="form-control" placeholder="Số điện thoại *"
-                                style={(this.state.check_vali_input).length == 0 ? null : (this.state.check_vali_input)['user_phone'] == "" ? {border: '1px solid #e70f0f'} : null}
+                            <input id="id-phone-payment" type="text" className="form-control" placeholder="Số điện thoại *"
+                                style={this.state.user_phone != "" ? { border: '1px solid rgb(44, 42, 42)' } : null}
                                 onChange={(e) => this.setPhone(e.target.value)} />
-                            <input type="text" className="form-control" placeholder="Email *"
-                                style={(this.state.check_vali_input).length == 0 ? null : (this.state.check_vali_input)['user_email'] == "" ? {border: '1px solid #e70f0f'} : null}
+                            <input id="id-email-payment" type="text" className="form-control" placeholder="Email *"
+                                style={this.state.user_email != "" ? { border: '1px solid rgb(44, 42, 42)' } : null}
                                 onChange={(e) => this.setEmail(e.target.value)} />
-                            <input type="text" className="form-control" placeholder="Địa chỉ *"
+                            <input id="id-address-payment" type="text" className="form-control" placeholder="Địa chỉ *"
+                                style={this.state.user_address != "" ? { border: '1px solid rgb(44, 42, 42)' } : null}
                                 onChange={(e) => this.setAddress(e.target.value)} />
                             <Adress address={this.state.user_address} callBacksetProvince={this.setProvince}
                                 callBacksetDistricts={this.setDistricts} callBacksetWards={this.setWards} />
@@ -329,7 +348,7 @@ export class Payment extends Component {
                         <h2>PHƯƠNG THỨC THANH TOÁN</h2>
                         <div className="row-radio-tt">
                             <input type="radio" name="gender" id="payment-direct" value="Thanh toán trực tiếp khi giao hàng"
-                                style={{color: 'red'}}
+                                style={{ color: 'red' }}
                                 onChange={(e) => this.setPayment(e.target.value)}
                             /> Thanh toán trực tiếp khi giao hàng
                         </div>

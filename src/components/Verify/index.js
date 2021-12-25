@@ -12,13 +12,12 @@ function index(props) {
     function submit(id, codeuser) {
         axios.post('/verify', { "ids" : [id], "code": codeuser })
             .then(res => {
-                console.log("id 1", id)
                 console.log("data verify", res)
                 if (res.data.status == "OK") {
                     props.setShow_Verify(false)
                     props.setIsActive_login(true)
                     props.setIsActive_register(false)
-                    // alert("Thành công")
+                    //props.setShowForgot(false)
                     Toast("Thành công", "#3b741b", 5000)
                 }
             })
